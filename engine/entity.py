@@ -89,7 +89,7 @@ class Entity:
                 been called.
         """
         value = self.__dict__[name]
-        object.__delattr__(self, name, value)
+        object.__delattr__(self, name, value)  # pytype: disable=attribute-error
 
         if isinstance(value, Component):
             return
