@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 __all__ = ["System", "PipelinedSystem", "UpdateSystem"]
 
 
-class System:
+class System(abc.ABC):
     """A collection of routines that describes an action taken every frame.
 
     Attributes:
