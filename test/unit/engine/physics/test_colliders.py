@@ -1,11 +1,11 @@
-"""Unit tests for ike.physics.colliders."""
+"""Unit tests for engine.physics.colliders."""
 import pytest
 
-from ike import Vector, Transform, BoxCollider
+from engine import Vector, Transform, BoxCollider
 
 
 class TestBoxCollider:
-    """Unit tests for ike.physics.colliders.BoxCollider."""
+    """Unit tests for engine.physics.colliders.BoxCollider."""
 
     # TODO(@bveeramani): Add tests that vary orientation, scale, and size.
     @pytest.mark.parametrize("collider, other, expected", [

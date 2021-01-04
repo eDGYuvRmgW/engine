@@ -1,9 +1,9 @@
-"""Unit tests for the ike.rendering.icon module."""
-from ike.rendering import Icon
+"""Unit tests for the engine.rendering.icon module."""
+from engine.rendering import Icon
 
 
 class TestIcon:
-    """Unit tests for ike.rendering.Icon class."""
+    """Unit tests for engine.rendering.Icon class."""
 
     def testInit(self):
         icon = Icon("textures/icon.png")
