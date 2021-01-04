@@ -69,12 +69,12 @@ class Entity:
             raise AttributeError("Cannot attach components before "
                                  "Entity.__init__() call.")
 
-        if type(component) in self._components:
+        if type(component) in components:
             raise ComponentError(f"Cannot attach {type(component)} to {self} "
                                  f"because a component of that type is already "
                                  f"attached.")
 
-        self._components[type(component)] = component
+        components[type(component)] = component
 
     def __delattr__(self, name: str) -> None:
         """Delete an instance attribute.
@@ -88,7 +88,7 @@ class Entity:
                 an instance of `Component` and the `Entity` constructor has not
                 been called.
         """
-        value = object.__getattr__(self, name, value)
+        value = object.__getattr__(self, name)
         object.__delattr__(self, name, value)
 
         if isinstance(value, Component):
@@ -101,7 +101,7 @@ class Entity:
             raise AttributeError("Cannot attach components before"
                                  "Entity.__init__() call.")
 
-        del self._components[type(component)]
+        del components[type(component)]
 
     def update(self, delta: float):
         """Update this entity.

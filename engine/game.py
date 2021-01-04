@@ -4,7 +4,7 @@ from __future__ import annotations
 from timeit import default_timer as timer
 from typing import Optional, TYPE_CHECKING
 
-from .system import System, PipelinedSystem, UpdateSystem
+from .system import PipelinedSystem, UpdateSystem
 from .rendering import Window, RenderingSystem
 from .inputs import InputSystem
 

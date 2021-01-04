@@ -5,5 +5,5 @@ Example:
     >>> if key.is_down(key.UP):
     ...     print("Up arrow pressed!")
 """
-from . import key
-from .systems import *
+from . import key  # noqa: F401
+from .systems import *  # noqa: F401,F403

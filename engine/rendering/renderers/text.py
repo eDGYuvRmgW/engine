@@ -29,7 +29,7 @@ DEFAULT_VERTEX_SHADER = """
         TexCoords = vertex.zw;
     }
     """
-    
+
 DEFAULT_FRAGMENT_SHADER = """
     #version 330 core
     in vec2 TexCoords;

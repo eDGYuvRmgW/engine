@@ -2,13 +2,12 @@
 from __future__ import annotations
 
 import abc
-from typing import List, TYPE_CHECKING
+from typing import Iterable, List, TYPE_CHECKING
 
 from .component import ComponentError
 
 if TYPE_CHECKING:
     from .entity import Entity
-    from .system import System
 
 __all__ = ["System", "PipelinedSystem", "UpdateSystem"]
 
