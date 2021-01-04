@@ -65,9 +65,9 @@ class Entity:
 
         try:
             components = self.__dict__["_components"]
-        except KeyError:
+        except KeyError as error:
             raise AttributeError("Cannot attach components before "
-                                 "Entity.__init__() call.")
+                                 "Entity.__init__() call.") from error
 
         if type(component) in components:
             raise ComponentError(f"Cannot attach {type(component)} to {self} "
@@ -88,7 +88,7 @@ class Entity:
                 an instance of `Component` and the `Entity` constructor has not
                 been called.
         """
-        value = object.__getattr__(self, name)
+        value = self.__dict__[name]
         object.__delattr__(self, name, value)
 
         if isinstance(value, Component):
@@ -96,10 +96,10 @@ class Entity:
         component = value
 
         try:
-            components = object.__getattr__(self, "_components")
-        except AttributeError:
+            components = self.__dict__["_components"]
+        except AttributeError as error:
             raise AttributeError("Cannot attach components before"
-                                 "Entity.__init__() call.")
+                                 "Entity.__init__() call.") from error
 
         del components[type(component)]
 
@@ -108,7 +108,6 @@ class Entity:
 
         You should override this method to implement behavior.
         """
-        pass
 
     @property
     def components(self) -> Iterable[Component]:

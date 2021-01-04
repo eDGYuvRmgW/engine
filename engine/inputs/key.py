@@ -27,8 +27,10 @@ def key_callback(  # pylint: disable=unused-argument
 
 
 class KeyboardHandlingSystem(System):
+    """System that checks for keyboard input."""
 
     def start(self) -> None:
+        """Get reference to window and set callback function."""
         self.window = glfw.get_current_context()
         glfw.set_key_callback(self.window, key_callback)
 

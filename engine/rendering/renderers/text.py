@@ -45,9 +45,8 @@ DEFAULT_FRAGMENT_SHADER = """
     }
     """
 
-DEFAULT_TEXT_SHADER = Shader.compile(
-    vertex=DEFAULT_VERTEX_SHADER,
-    fragment=DEFAULT_FRAGMENT_SHADER)
+DEFAULT_TEXT_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
+                                     fragment=DEFAULT_FRAGMENT_SHADER)
 
 
 class TextRenderer:  # noqa: E241  # pylint: disable=too-few-public-methods

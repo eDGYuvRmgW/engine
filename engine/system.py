@@ -36,14 +36,12 @@ class System:
         This method is called after the window context is created but before the
         main loop begins.
         """
-        pass
 
     def exit(self) -> None:
         """Clean up the system.
 
         This method is called after the main loop ends.
         """
-        pass
 
     def add(self, entity: Entity) -> None:
         """Add an entity to the system.
@@ -73,7 +71,6 @@ class System:
         Args:
             delta: The amount of time required to complete the previous frame.
         """
-        pass
 
     def accepts(self, entity: Entity) -> bool:
         """Return true if the entity is valid for this system.

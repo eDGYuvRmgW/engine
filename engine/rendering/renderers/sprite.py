@@ -42,9 +42,8 @@ DEFAULT_FRAGMENT_SHADER = """
     }
     """
 
-DEFAULT_SPRITE_SHADER = Shader.compile(
-    vertex=DEFAULT_FRAGMENT_SHADER,
-    fragment=DEFAULT_VERTEX_SHADER)
+DEFAULT_SPRITE_SHADER = Shader.compile(vertex=DEFAULT_FRAGMENT_SHADER,
+                                       fragment=DEFAULT_VERTEX_SHADER)
 
 
 class SpriteRenderer:  # pylint: disable=too-few-public-methods

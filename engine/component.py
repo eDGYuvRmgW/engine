@@ -3,7 +3,7 @@
 __all__ = ["Component", "ComponentError"]
 
 
-class Component:
+class Component:  # pylint: disable=too-few-public-methods
     """Raw data for one aspect of an entity."""
 
 

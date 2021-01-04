@@ -81,25 +81,21 @@ class TestTransform:
         transform.translate(movement)
         assert transform.position == expected_position
 
-    @pytest.mark.parametrize("transform, other_transform, expected_bool", [
-        (Transform(), Transform(), True),
-        (Transform(), Transform(position=Vector(1, 0, 0)), False),
-        (Transform(), Vector(0, 0, 0), False)
-    ])
+    @pytest.mark.parametrize(
+        "transform, other_transform, expected_bool",
+        [(Transform(), Transform(), True),
+         (Transform(), Transform(position=Vector(1, 0, 0)), False),
+         (Transform(), Vector(0, 0, 0), False)])
     def testEq(self, transform, other_transform, expected_bool):
         assert (transform == other_transform) == expected_bool
 
     def testCopy(self):
-        transform = Transform(
-            position=Vector(1, 0, 0),
-            rotation=Vector(30, 45, 60),
-            scale=Vector(2, 2, 2)
-        )
-        expected_transform = Transform(
-            position=Vector(1, 0, 0),
-            rotation=Vector(30, 45, 60),
-            scale=Vector(2, 2, 2)
-        )
+        transform = Transform(position=Vector(1, 0, 0),
+                              rotation=Vector(30, 45, 60),
+                              scale=Vector(2, 2, 2))
+        expected_transform = Transform(position=Vector(1, 0, 0),
+                                       rotation=Vector(30, 45, 60),
+                                       scale=Vector(2, 2, 2))
 
         transform_copy = copy.copy(transform)
 
