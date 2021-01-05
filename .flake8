@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 80
+# NOTE(@bveeramani): F403 and F405 are warnings for wildcard imports. I'm
+# disabling them globally because we can't disable them at the module level.
+# pylint performs similar checks, and we can disable those at the module level.
+# TODO(@bveeramani): Resolve W504 warnings.
+ignore = F403, F405, W504
