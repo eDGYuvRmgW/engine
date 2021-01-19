@@ -7,7 +7,7 @@ from engine.transform import Transform
 
 from .sprite import Sprite
 from .text import Text
-from .renderers import SpriteRenderer, TextRenderer
+from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
 
 
 class RenderingSystem(PipelinedSystem):
@@ -19,6 +19,7 @@ class RenderingSystem(PipelinedSystem):
             WindowClearSystem(),
             TextRenderingSystem(),
             SpriteRenderingSystem(),
+            MeshRenderingSystem(),
             BufferSwapSystem()
         ])
 
@@ -59,6 +60,18 @@ class SpriteRenderingSystem(System):
         """Render each sprite in the scene."""
         for entity in self.entities:
             self.renderer.draw(entity[Sprite], entity[Transform])
+
+
+class MeshRenderingSystem(System):
+    """System that renders a mesh."""
+
+    def start(self) -> None:
+        """Construct a mesh renderer."""
+        self.renderer = MeshRenderer()
+
+    def step(self, delta: float) -> None:
+        """Render each mesh in the scene."""
+        self.renderer.draw()    
 
 
 class BufferSwapSystem(System):

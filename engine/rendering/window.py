@@ -4,6 +4,7 @@ from typing import Optional
 import glfw
 import OpenGL.GL as gl
 
+from engine.rendering.camera import Camera
 from engine.rendering.icon import Icon
 
 __all__ = ["Window"]
@@ -43,6 +44,8 @@ class Window:  # pylint: disable=too-few-public-methods
         self.window = glfw.create_window(self.width, self.height, self.name,
                                          None, None)
 
+        camera = Camera()
+
         if not self.window:
             glfw.terminate()
             raise RuntimeError("Failed to create window.")
@@ -55,6 +58,11 @@ class Window:  # pylint: disable=too-few-public-methods
 
         gl.glEnable(gl.GL_BLEND)
         gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+
+        #gl.glEnable(gl.GL_DEPTH_TEST)
+        #gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
+
+        gl.glClearColor(0, 0.1, 0.1, 1)
 
         glfw.set_framebuffer_size_callback(self.window,
                                            framebuffer_size_callback)
