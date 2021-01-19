@@ -5,6 +5,8 @@ import OpenGL.GL as gl
 from engine.system import System, PipelinedSystem
 from engine.transform import Transform
 
+from .camera import Camera
+from .lighting import Lamp
 from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
@@ -15,11 +17,14 @@ class RenderingSystem(PipelinedSystem):
 
     def __init__(self):
         """Construct and pipeline the systems needed to render a scene."""
+        self.camera = Camera()
+
         super().__init__([
             WindowClearSystem(),
             TextRenderingSystem(),
             SpriteRenderingSystem(),
-            MeshRenderingSystem(),
+            MeshRenderingSystem(self.camera.get_view()),
+            LightSystem(self.camera.get_view()),
             BufferSwapSystem()
         ])
 
@@ -29,7 +34,7 @@ class WindowClearSystem(System):
 
     def step(self, delta: float) -> None:
         """Clear the pixels on the screen."""
-        gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+        gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
 
 
 class TextRenderingSystem(System):
@@ -65,13 +70,33 @@ class SpriteRenderingSystem(System):
 class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
+    def __init__(self, view):
+        """Do something."""
+        self.view = view
+
     def start(self) -> None:
         """Construct a mesh renderer."""
         self.renderer = MeshRenderer()
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
-        self.renderer.draw()    
+        self.renderer.draw(self.view)
+
+
+class LightSystem(System):
+    """System that renders a light."""
+
+    def __init__(self, view):
+        """Do something."""
+        self.view = view
+
+    def start(self) -> None:
+        """Construct a lamp."""
+        self.renderer = Lamp()
+
+    def step(self, delta: float) -> None:
+        """Render each lamp in the scene."""
+        self.renderer.draw(self.view)
 
 
 class BufferSwapSystem(System):

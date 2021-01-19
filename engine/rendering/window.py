@@ -59,8 +59,7 @@ class Window:  # pylint: disable=too-few-public-methods
         gl.glEnable(gl.GL_BLEND)
         gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
 
-        #gl.glEnable(gl.GL_DEPTH_TEST)
-        #gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
+        gl.glEnable(gl.GL_DEPTH_TEST)
 
         gl.glClearColor(0, 0.1, 0.1, 1)
 
