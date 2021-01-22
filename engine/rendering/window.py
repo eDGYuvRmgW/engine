@@ -44,8 +44,6 @@ class Window:  # pylint: disable=too-few-public-methods
         self.window = glfw.create_window(self.width, self.height, self.name,
                                          None, None)
 
-        camera = Camera()
-
         if not self.window:
             glfw.terminate()
             raise RuntimeError("Failed to create window.")

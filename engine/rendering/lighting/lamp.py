@@ -105,17 +105,12 @@ class Lamp:  # pylint: disable=too-few-public-methods
     def draw(self, view: glm.mat4):
         """Draw the lamp on the screen."""
         gl.glUseProgram(self.shader.program)
-        #texture = Texture("textures/ike.jpg")
-        #gl.glBindTexture(gl.GL_TEXTURE_2D, texture.name)
 
         model = glm.mat4(1.0)
         model = glm.translate(model, glm.vec3(0.5, 0.5, 0.6))
         model = glm.rotate(model, float(glfw.get_time() * glm.radians(50.0)),
                            glm.vec3(0.5, 1.0, 0.0))
         model = glm.scale(model, glm.vec3(0.25))
-
-        #view = glm.mat4(1.0)
-        #view = glm.translate(view, glm.vec3(0.0, 0.0, -3.0))
 
         #projection = glm.ortho(0.0, 800.0, 600.0, 0.0, 0.001, 1000.0)
         projection = glm.perspective(glm.radians(45.0), 800.0 / 600.0, 0.1, 100.0)
