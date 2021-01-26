@@ -5,6 +5,7 @@ import glm
 import numpy as np
 import OpenGL.GL as gl
 
+from engine.rendering.camera import Camera
 from engine.rendering.shader import Shader
 
 __all__ = ["Lamp"]
@@ -39,8 +40,10 @@ DEFAULT_LAMP_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
 class Lamp:  # pylint: disable=too-few-public-methods
     """A simple light."""
 
-    def __init__(self, shader: Shader = DEFAULT_LAMP_SHADER):
+    def __init__(self, camera: Camera, shader: Shader = DEFAULT_LAMP_SHADER):
         """Initialize OpenGL buffer data."""
+        self.camera = camera
+
         vertices = np.array([
             -0.5, -0.5, -0.5,  0.0, 0.0,
             0.5, -0.5, -0.5,  1.0, 0.0,
@@ -102,27 +105,21 @@ class Lamp:  # pylint: disable=too-few-public-methods
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0)
         gl.glBindVertexArray(0)
 
-    def draw(self, view: glm.mat4):
+    def draw(self):
         """Draw the lamp on the screen."""
         gl.glUseProgram(self.shader.program)
 
         model = glm.mat4(1.0)
-        model = glm.translate(model, glm.vec3(0.5, 0.5, 0.6))
+        model = glm.translate(model, glm.vec3(450.0, 450.0, 0.0))
         model = glm.rotate(model, float(glfw.get_time() * glm.radians(50.0)),
                            glm.vec3(0.5, 1.0, 0.0))
-        model = glm.scale(model, glm.vec3(0.25))
+        model = glm.scale(model, glm.vec3(25.0))
 
-        #projection = glm.ortho(0.0, 800.0, 600.0, 0.0, 0.001, 1000.0)
-        projection = glm.perspective(glm.radians(45.0), 800.0 / 600.0, 0.1, 100.0)
+        projection = glm.ortho(0.0, 800.0, 0.0, 600.0, -100.0, 100.0)
 
-        model_loc = gl.glGetUniformLocation(self.shader.program, "model")
-        gl.glUniformMatrix4fv(model_loc, 1, gl.GL_FALSE, glm.value_ptr(model))
-
-        view_loc = gl.glGetUniformLocation(self.shader.program, "view")
-        gl.glUniformMatrix4fv(view_loc, 1, gl.GL_FALSE, glm.value_ptr(view))
-
-        proj_loc = gl.glGetUniformLocation(self.shader.program, "projection")
-        gl.glUniformMatrix4fv(proj_loc, 1, gl.GL_FALSE, glm.value_ptr(projection))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"), 1, gl.GL_FALSE, glm.value_ptr(model))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"), 1, gl.GL_FALSE, glm.value_ptr(self.camera.get_view()))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(projection))
 
         gl.glBindVertexArray(self.vao)
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)

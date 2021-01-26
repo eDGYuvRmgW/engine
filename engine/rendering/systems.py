@@ -11,20 +11,20 @@ from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
 
+_CAMERA = Camera()
+
 
 class RenderingSystem(PipelinedSystem):
     """System that renders objects in a scene."""
 
     def __init__(self):
         """Construct and pipeline the systems needed to render a scene."""
-        self.camera = Camera()
-
         super().__init__([
             WindowClearSystem(),
             TextRenderingSystem(),
             SpriteRenderingSystem(),
-            MeshRenderingSystem(self.camera.get_view()),
-            LightSystem(self.camera.get_view()),
+            MeshRenderingSystem(),
+            LightSystem(),
             BufferSwapSystem()
         ])
 
@@ -70,33 +70,25 @@ class SpriteRenderingSystem(System):
 class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
-    def __init__(self, view):
-        """Do something."""
-        self.view = view
-
     def start(self) -> None:
         """Construct a mesh renderer."""
-        self.renderer = MeshRenderer()
+        self.renderer = MeshRenderer(_CAMERA)
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
-        self.renderer.draw(self.view)
+        self.renderer.draw()
 
 
 class LightSystem(System):
     """System that renders a light."""
 
-    def __init__(self, view):
-        """Do something."""
-        self.view = view
-
     def start(self) -> None:
         """Construct a lamp."""
-        self.renderer = Lamp()
+        self.renderer = Lamp(_CAMERA)
 
     def step(self, delta: float) -> None:
         """Render each lamp in the scene."""
-        self.renderer.draw(self.view)
+        self.renderer.draw()
 
 
 class BufferSwapSystem(System):
