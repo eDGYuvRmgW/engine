@@ -35,22 +35,6 @@ DEFAULT_VERTEX_SHADER = """
 
 DEFAULT_FRAGMENT_SHADER = """
     #version 410 core
-    out vec4 FragColor;
-
-    in vec2 TexCoord;
-    in vec3 FragPos;
-    in vec3 Normal;
-
-    uniform vec3 lightPos;
-
-    void main()
-    {
-        FragColor = texture(aTexture, TexCoord);
-    }
-    """
-
-DEFAULT_LIGHTING_SHADER = """
-    #version 410 core
     struct Material {
         vec3 ambient;
         vec3 diffuse;
@@ -95,7 +79,7 @@ DEFAULT_LIGHTING_SHADER = """
 """
 
 DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
-                                       fragment=DEFAULT_LIGHTING_SHADER)
+                                       fragment=DEFAULT_FRAGMENT_SHADER)
 
 class MeshRenderer: # pylint: disable=too-few-public-methods
     """A renderer for drawing meshes on the screen."""
@@ -104,6 +88,7 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
         """Initialize OpenGL buffer data."""
         self.camera = camera
 
+        # TODO(@nspevacek): replace with vertices from loaded model once implemented
         vertices = np.array([
             -0.5, -0.5, -0.5,  0.0, 0.0,
             0.5, -0.5, -0.5,  1.0, 0.0,
@@ -197,10 +182,8 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
             gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"), 1, gl.GL_FALSE, glm.value_ptr(model))
             gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
 
-        projection = glm.ortho(0.0, 800.0, 0.0, 600.0, -100.0, 100.0)
-
         gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"), 1, gl.GL_FALSE, glm.value_ptr(self.camera.get_view()))
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(projection))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(self.camera.get_projection()))
 
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"), 450.0, 450.0, 0.0)
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"), 0.0, 0.0, 3.0)
@@ -220,8 +203,3 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.specular"), 0.5, 0.5, 0.5)
         
         gl.glBindVertexArray(0)
-
-    def assign_light(self, position: glm.vec3) -> None:
-        """Assigns a light position."""
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"), position.x, position.y, position.z)
-

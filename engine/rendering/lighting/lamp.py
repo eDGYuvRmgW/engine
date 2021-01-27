@@ -115,11 +115,9 @@ class Lamp:  # pylint: disable=too-few-public-methods
                            glm.vec3(0.5, 1.0, 0.0))
         model = glm.scale(model, glm.vec3(25.0))
 
-        projection = glm.ortho(0.0, 800.0, 0.0, 600.0, -100.0, 100.0)
-
         gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"), 1, gl.GL_FALSE, glm.value_ptr(model))
         gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"), 1, gl.GL_FALSE, glm.value_ptr(self.camera.get_view()))
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(projection))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(self.camera.get_projection()))
 
         gl.glBindVertexArray(self.vao)
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)

@@ -3,9 +3,6 @@ from dataclasses import dataclass
 
 from engine.component import Component
 
-from .color import Color
-from .texture import Texture
-
 __all__ = ["Mesh"]
 
 
@@ -13,9 +10,5 @@ __all__ = ["Mesh"]
 class Mesh(Component):
     """Encapsulates a mesh.
 
-    Attributes:
-        texture: The mesh's texture.
-        color: The mesh's color.
+    Placeholder until model loading is implemented.
     """
-
-    color: Color = Color(1.0, 1.0, 1.0)
