@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
     print(requirements)
 
 setuptools.setup(
-    name="framework",
+    name="example-pkg-eDGYuvRmgW",
     version="0.1.0",
     author="Balaji Veeramani, Haiwen Dai, Jordi Aviles, Nicholas Spevacek",
     author_email="bveeramani@berkeley.edu",
