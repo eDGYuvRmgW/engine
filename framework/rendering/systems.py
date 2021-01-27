@@ -2,8 +2,8 @@
 import glfw
 import OpenGL.GL as gl
 
-from engine.system import System, PipelinedSystem
-from engine.transform import Transform
+from framework.system import System, PipelinedSystem
+from framework.transform import Transform
 
 from .sprite import Sprite
 from .text import Text

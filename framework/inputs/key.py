@@ -3,7 +3,7 @@ import collections
 
 import glfw
 
-from engine.system import System
+from framework.system import System
 
 __all__ = ["UP", "DOWN", "LEFT", "RIGHT", "ENTER", "is_down", "is_pressed"]
 

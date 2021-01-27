@@ -1,5 +1,5 @@
 """Implements the `InputSystem` class."""
-from engine.system import PipelinedSystem
+from framework.system import PipelinedSystem
 
 from .key import KeyboardHandlingSystem
 

@@ -7,7 +7,7 @@ import os
 import OpenGL.GL as gl
 import OpenGL.GL.shaders as gls
 
-from engine import resource
+from framework import resource
 
 __all__ = ["Shader"]
 

@@ -1,12 +1,12 @@
-"""Unit tests for engine.transform."""
+"""Unit tests for framework.transform."""
 import copy
 import pytest
 
-from engine import Vector, Transform
+from framework import Vector, Transform
 
 
 class TestVector:
-    """Unit tests for engine.transform.Vector."""
+    """Unit tests for framework.transform.Vector."""
 
     @pytest.mark.parametrize("vector, other_vector, expected_vector", [
         (Vector(1, 6, 3), Vector(-7, -4, 2), Vector(-6, 2, 5)),
@@ -69,7 +69,7 @@ class TestVector:
 
 
 class TestTransform:
-    """Unit tests for engine.transform.Transform."""
+    """Unit tests for framework.transform.Transform."""
 
     @pytest.mark.parametrize("initial_position, movement, expected_position", [
         (Vector(1, 6, 3), Vector(-7, -4, 2), Vector(-6, 2, 5)),

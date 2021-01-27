@@ -1,10 +1,10 @@
 """Implements the `Text` class."""
 from dataclasses import dataclass
 
-from engine.component import Component
+from framework.component import Component
 
-from engine.rendering.color import Color
-from engine.rendering.font import Font
+from framework.rendering.color import Color
+from framework.rendering.font import Font
 
 __all__ = ["Text"]
 
