@@ -21,8 +21,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    install_requires=requirements,
-    include_package_data=True,
-    python_requires='>=3.7',
-    zip_safe=False
+    install_requires=requirements, 
+    package_data={"framework", ["assets/*"]},
+    python_requires='>=3.7'
 )
