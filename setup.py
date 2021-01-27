@@ -22,7 +22,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=requirements,
-    package_data={"framework": ["assets/*"]},
+    include_package_data=True,
     python_requires='>=3.7',
     zip_safe=False
 )
