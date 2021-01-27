@@ -22,6 +22,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=requirements, 
-    package_data={"framework", ["assets/*"]},
+    package_data={"framework": ["assets/*"]},
     python_requires='>=3.7'
 )
