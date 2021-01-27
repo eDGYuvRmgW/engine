@@ -16,4 +16,5 @@ def path(relative_path: str):
         # TODO(@bveeramani): Make the base path the top-level directory rather
         # than the current working directory.
         base_path = os.path.abspath(".")
-    return os.path.join(base_path, "assets", relative_path)
+    print(os.path.join(__file__, "assets", relative_path))
+    return os.path.join(__file__, "assets", relative_path)
