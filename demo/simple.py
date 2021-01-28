@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from engine import Direction, Game, Entity, Transform
+from engine import Direction, Entity, Game, Transform
 from engine.rendering import Sprite, Text
 from engine.inputs import key
 
@@ -14,14 +14,14 @@ class Box(Entity):
         super().__init__()
         self.text = Text("Hello, world!")
 
-        self.yeet = transform
+        self.transform = transform
         self.speed = speed
 
-    def update(self, delta: float):
+    def update(self, delta: float) -> None:
         if key.is_down(key.LEFT):
-            self.yeet.position += self.speed * Direction.LEFT * delta
+            self.transform.position += self.speed * Direction.LEFT * delta
         if key.is_down(key.RIGHT):
-            self.yeet.position += self.speed * Direction.RIGHT * delta
+            self.transform.position += self.speed * Direction.RIGHT * delta
 
 
 game = Game("Simple Game")

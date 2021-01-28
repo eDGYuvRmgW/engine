@@ -1,4 +1,4 @@
-"""Defines shell commands for building and testing the engine."""
+"""Defines shell commands for building and testing the framework."""
 import logging
 import sys
 
