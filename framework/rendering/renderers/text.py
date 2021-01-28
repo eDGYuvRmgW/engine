@@ -8,11 +8,11 @@ import glm  # pytype: disable=import-error
 import OpenGL.GL as gl
 import numpy as np
 
-from framework.rendering.shader import Shader
+from engine.rendering.shader import Shader
 
 if TYPE_CHECKING:
-    from framework.transform import Transform
-    from framework.rendering.text import Text
+    from engine.transform import Transform
+    from engine.rendering.text import Text
 
 __all__ = ["TextRenderer"]
 

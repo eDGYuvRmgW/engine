@@ -1,7 +1,7 @@
 """Implements input handling.
 
 Example:
-    >>> from framework.inputs import key
+    >>> from engine.inputs import key
     >>> if key.is_down(key.UP):
     ...     print("Up arrow pressed!")
 """

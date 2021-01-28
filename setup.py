@@ -17,14 +17,14 @@ install_requires = [
 ]
 
 setuptools.setup(
-    name="framework",
+    name="engine",
     version="0.1.0",
     author="Balaji Veeramani, Haiwen Dai, Jordi Aviles, Nicholas Spevacek",
     author_email="bveeramani@berkeley.edu",
-    description="A lightweight and easy-to-use game development framework.",
+    description="A lightweight and easy-to-use game development engine.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/eDGYuvRmgW/framework",
+    url="https://github.com/eDGYuvRmgW/engine",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -32,6 +32,6 @@ setuptools.setup(
     ],
     install_requires=install_requires, 
     include_package_data=True,
-    package_data={"framework": ["assets/fonts/*"]},
+    package_data={"engine": ["assets/fonts/*"]},
     python_requires='>=3.7'
 )

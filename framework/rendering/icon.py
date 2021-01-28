@@ -1,7 +1,7 @@
 """Implements the `Icon` class."""
 from PIL import Image
 
-from framework import resource
+from engine import resource
 
 __all__ = ["Icon"]
 
@@ -23,7 +23,7 @@ class Icon:  # pylint: disable=too-few-public-methods
             image in the `images` list.
 
     Example:
-        >>> from framework.rendering import Window
+        >>> from engine.rendering import Window
         >>> icon = Icon("textures/icon.png")
         >>> with Window("Untitled Window", 1080, 720, icon=icon) as window:
         ...     pass

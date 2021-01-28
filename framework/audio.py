@@ -1,7 +1,7 @@
 """Implements classes for audio playback.
 
 Example:
-    >>> from framework import resource
+    >>> from engine import resource
     >>> music = AudioSource(resource.path("music/theme.wav"), loop=True)
     >>> music.play()
     >>> import time
@@ -21,7 +21,7 @@ import wave
 # remove members that are not prefixed with "al".
 from openal import *
 
-from framework import resource
+from engine import resource
 
 _DEVICE = alcOpenDevice(None)
 if not _DEVICE:

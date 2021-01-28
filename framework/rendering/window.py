@@ -4,7 +4,7 @@ from typing import Optional
 import glfw
 import OpenGL.GL as gl
 
-from framework.rendering.icon import Icon
+from engine.rendering.icon import Icon
 
 __all__ = ["Window"]
 

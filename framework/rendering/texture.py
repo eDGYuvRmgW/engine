@@ -2,7 +2,7 @@
 import OpenGL.GL as gl
 from PIL import Image
 
-import framework.resource as resource
+import engine.resource as resource
 
 _TEXTURES = {}
 

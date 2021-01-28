@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
-from framework import Direction, Game, Entity, Transform
-from framework.rendering import Sprite, Text
-from framework.inputs import key
+from engine import Direction, Game, Entity, Transform
+from engine.rendering import Sprite, Text
+from engine.inputs import key
 
 if TYPE_CHECKING:
-    from framework import Transform
+    from engine import Transform
 
 
 class Box(Entity):

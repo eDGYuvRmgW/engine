@@ -1,4 +1,4 @@
-"""Defines shell commands for building and testing the framework."""
+"""Defines shell commands for building and testing the engine."""
 import logging
 import sys
 
@@ -11,9 +11,9 @@ from invoke import task
 def yapf(c, check=False):  # pylint: disable=redefined-outer-name
     """Format Python code in the Google style."""
     if check:
-        c.run("yapf --style google -r --diff framework test tasks.py")
+        c.run("yapf --style google -r --diff engine test tasks.py")
     else:
-        c.run("yapf --style google -ir framework test tasks.py")
+        c.run("yapf --style google -ir engine test tasks.py")
 
 
 @task(yapf)
@@ -27,14 +27,14 @@ def format(c):  # pylint: disable=redefined-builtin, unused-argument
 @task
 def pylint(c):
     """Lint Python files with pylint."""
-    c.run("pylint --score=no framework tasks")
+    c.run("pylint --score=no engine tasks")
     c.run("pylint --score=no --rcfile ./test/.pylintrc test")
 
 
 @task
 def flake8(c):
     """Lint Python files with flake8."""
-    c.run("flake8 framework test")
+    c.run("flake8 engine test")
     c.run("flake8 --ignore=E266 tasks.py")
 
 
@@ -47,25 +47,25 @@ def pytype(c):
 
     # NOTE(@bveeramani): 'pyi-error' is disabled because of the issue described
     # at https://github.com/google/pytype/issues/428.
-    c.run("pytype --disable=pyi-error framework test tasks.py")
+    c.run("pytype --disable=pyi-error engine test tasks.py")
 
 
 @task
 def radon(c):
     """Report Python code complexity with radon."""
-    c.run("radon cc -a -nc framework test tasks.py")
+    c.run("radon cc -a -nc engine test tasks.py")
 
 
 @task(radon)
 def xenon(c):
     """Monitor Python code complexity with xenon."""
-    c.run("xenon -b B -m A -a A framework test tasks.py")
+    c.run("xenon -b B -m A -a A engine test tasks.py")
 
 
 @task
 def pydocstyle(c):
     """Lint Python docstrings with pydocstyle."""
-    c.run("pydocstyle --convention=google --add-select=D400,D401,D404 framework "
+    c.run("pydocstyle --convention=google --add-select=D400,D401,D404 engine "
           "tasks.py")
     c.run("pydocstyle --convention=google --add-ignore=D104 test")
 

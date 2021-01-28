@@ -5,10 +5,10 @@ import glm  # pytype: disable=import-error
 import numpy as np
 import OpenGL.GL as gl
 
-from framework.transform import Transform
+from engine.transform import Transform
 
-from framework.rendering.shader import Shader
-from framework.rendering.sprite import Sprite
+from engine.rendering.shader import Shader
+from engine.rendering.sprite import Sprite
 
 __all__ = ["SpriteRenderer"]
 
