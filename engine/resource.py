@@ -1,6 +1,5 @@
 """Functions for accessing game assets."""
 import os
-import sys
 
 
 def path(relative_path: str):
