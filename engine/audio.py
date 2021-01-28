@@ -21,8 +21,6 @@ import wave
 # remove members that are not prefixed with "al".
 from openal import *
 
-from engine import resource
-
 _DEVICE = alcOpenDevice(None)
 if not _DEVICE:
     raise RuntimeError("Failed to open default OpenAL device.")

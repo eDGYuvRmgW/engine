@@ -2,7 +2,7 @@
 import os
 
 
-def path(path: str) -> str:
+def path(path: str) -> str:  # pylint: disable=redefined-outer-name
     """Return the absolute path to a file in the standard assets directory.
 
     Args:
