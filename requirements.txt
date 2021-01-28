@@ -8,3 +8,16 @@ PyOpenGL
 PyOpenGL-accelerate
 numpy
 pillow
+# Development requirements
+flake8
+flake8_polyfill
+invoke
+pretty-errors
+pydocstyle
+pyinstaller
+pylint
+pytest
+pytype
+radon
+xenon
+yapf
