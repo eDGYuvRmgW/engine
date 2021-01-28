@@ -10,7 +10,7 @@ install_requires = [
     "freetype-py",
     "glfw",
     "PyGLM",
-    "PyOpenAL-accelerate",
+    "PyOpenGL-accelerate",
     "PyOpenGL",
     "numpy",
     "pillow",
