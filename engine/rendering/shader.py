@@ -7,8 +7,6 @@ import os
 import OpenGL.GL as gl
 import OpenGL.GL.shaders as gls
 
-from engine import resource
-
 __all__ = ["Shader"]
 
 _SHADERS = {}
@@ -31,11 +29,11 @@ class Shader:  # pylint: disable=too-few-public-methods
             fragment: Path to the fragment shader relative to the assets
                 directory.
         """
-        self.vertex_path = resource.path(vertex)
+        self.vertex_path = vertex
         with open(self.vertex_path) as file:
             self.vertex_source = file.read()
 
-        self.fragment_path = resource.path(fragment)
+        self.fragment_path = fragment
         with open(self.fragment_path) as file:
             self.fragment_source = file.read()
 

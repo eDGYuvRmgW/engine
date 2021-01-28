@@ -2,7 +2,7 @@
 
 Example:
     >>> from engine import resource
-    >>> music = AudioSource(resource.path("music/theme.wav"), loop=True)
+    >>> music = AudioSource("music/theme.wav", loop=True)
     >>> music.play()
     >>> import time
     >>> time.sleep(10)
@@ -145,8 +145,6 @@ class AudioSource:
             loop: If true, then loop the audio indefinitely.
         """
         _SOURCES.append(self)
-
-        path = resource.path(path)
 
         audio_file = AudioFile(path)
         buffer = AudioBuffer(audio_file)

@@ -2,8 +2,6 @@
 import OpenGL.GL as gl
 from PIL import Image
 
-import engine.resource as resource
-
 _TEXTURES = {}
 
 
@@ -25,7 +23,7 @@ class Texture:  # pylint: disable=too-few-public-methods
         """
         self.path = path
 
-        image = Image.open(resource.path(path))
+        image = Image.open(path)
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
 
         self.width = image.width
