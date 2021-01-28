@@ -1,8 +1,6 @@
 """Implements the `Icon` class."""
 from PIL import Image
 
-from engine import resource
-
 __all__ = ["Icon"]
 
 
@@ -39,7 +37,7 @@ class Icon:  # pylint: disable=too-few-public-methods
                 directory.
         """
         self.path = path
-        image = Image.open(resource.path(path))
+        image = Image.open(path)
         self.images = [image.resize((size, size)) for size in self.sizes]
 
     def __repr__(self) -> str:

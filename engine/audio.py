@@ -2,7 +2,7 @@
 
 Example:
     >>> from engine import resource
-    >>> music = AudioSource(resource.path("music/theme.wav"), loop=True)
+    >>> music = AudioSource("music/theme.wav", loop=True)
     >>> music.play()
     >>> import time
     >>> time.sleep(10)
@@ -20,8 +20,6 @@ import wave
 # TODO(@bveeramani): Remove wildcard import or fork the PyOpenAL library and
 # remove members that are not prefixed with "al".
 from openal import *
-
-from engine import resource
 
 _DEVICE = alcOpenDevice(None)
 if not _DEVICE:
@@ -145,8 +143,6 @@ class AudioSource:
             loop: If true, then loop the audio indefinitely.
         """
         _SOURCES.append(self)
-
-        path = resource.path(path)
 
         audio_file = AudioFile(path)
         buffer = AudioBuffer(audio_file)

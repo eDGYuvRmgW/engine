@@ -5,7 +5,6 @@ import freetype
 import glm  # pytype: disable=import-error
 import OpenGL.GL as gl
 
-from engine import resource
 from engine.rendering.character import Character
 
 __all__ = ["Font"]
@@ -40,7 +39,7 @@ class Font:  # pylint: disable=too-few-public-methods
 
         gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
 
-        face = freetype.Face(resource.path(self.path))
+        face = freetype.Face(self.path)
         face.set_char_size(self.size * 64)
 
         for i in range(128):
