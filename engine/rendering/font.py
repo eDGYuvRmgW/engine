@@ -39,7 +39,7 @@ class Font:  # pylint: disable=too-few-public-methods
             return self._characters
 
         gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
-        print(resource.path(self.path))
+
         face = freetype.Face(resource.path(self.path))
         face.set_char_size(self.size * 64)
 
