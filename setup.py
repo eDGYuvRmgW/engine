@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
     print(requirements)
 
 setuptools.setup(
-    name="example-pkg-eDGYuvRmgW",
+    name="framework",
     version="0.1.0",
     author="Balaji Veeramani, Haiwen Dai, Jordi Aviles, Nicholas Spevacek",
     author_email="bveeramani@berkeley.edu",
@@ -23,6 +23,6 @@ setuptools.setup(
     ],
     install_requires=requirements, 
     include_package_data=True,
-    package_data={"": ["assets/*"]},
+    package_data={"framework": ["assets/fonts/*"]},
     python_requires='>=3.7'
 )
