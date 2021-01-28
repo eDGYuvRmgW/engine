@@ -3,9 +3,18 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-with open("requirements.txt", "r") as fh:
-    requirements = fh.read().splitlines()
-    print(requirements)
+# Don't change the order of `PyOpenGL` and `PyOpenGL-accelerate`!
+# https://github.com/pypa/setuptools/issues/196
+# https://github.com/pypa/setuptools/issues/498 
+install_requires = [
+    "freetype-py",
+    "glfw",
+    "PyGLM",
+    "PyOpenAL-accelerate",
+    "PyOpenGL",
+    "numpy",
+    "pillow",
+]
 
 setuptools.setup(
     name="framework",
@@ -21,7 +30,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    install_requires=requirements, 
+    install_requires=install_requires, 
     include_package_data=True,
     package_data={"framework": ["assets/fonts/*"]},
     python_requires='>=3.7'
