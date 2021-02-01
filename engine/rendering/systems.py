@@ -2,16 +2,16 @@
 import glfw
 import OpenGL.GL as gl
 
+from engine.entity import Entity
 from engine.system import System, PipelinedSystem
 from engine.transform import Transform
 
 from .camera import Camera
 from .lighting import Lamp
+from .mesh import Mesh
 from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
-
-_CAMERA = Camera()
 
 
 class RenderingSystem(PipelinedSystem):
@@ -24,7 +24,6 @@ class RenderingSystem(PipelinedSystem):
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             MeshRenderingSystem(),
-            LightSystem(),
             BufferSwapSystem()
         ])
 
@@ -43,13 +42,32 @@ class TextRenderingSystem(System):
     REQUIRED_COMPONENTS = Transform, Text
 
     def start(self) -> None:
-        """Construct a text renderer."""
-        self.renderer = TextRenderer()
+        self.camera = None
+        self.renderer = None
 
     def step(self, delta: float) -> None:
         """Render text in the scene."""
         for entity in self.entities:
             self.renderer.draw(entity[Text], entity[Transform])
+
+    def add(self, entity: Entity) -> None:
+        if isinstance(entity, Camera) and not self.camera:
+            self.camera = entity
+            self.renderer = TextRenderer(entity)
+            return
+
+        if isinstance(entity, Camera) and self.camera:
+            raise AttributeError("Camera is already set")
+
+        super().add(entity)
+
+    def remove(self, entity: Entity) -> None:
+        if entity is self.camera:
+            self.camera = None
+            self.renderer = None
+            return
+
+        super().remove(entity)
 
 
 class SpriteRenderingSystem(System):
@@ -59,36 +77,65 @@ class SpriteRenderingSystem(System):
 
     def start(self) -> None:
         """Construct a sprite renderer."""
-        self.renderer = SpriteRenderer()
+        self.camera = None
+        self.renderer = None
 
     def step(self, delta: float) -> None:
         """Render each sprite in the scene."""
         for entity in self.entities:
             self.renderer.draw(entity[Sprite], entity[Transform])
 
+    def add(self, entity: Entity) -> None:
+        if isinstance(entity, Camera) and not self.camera:
+            self.camera = entity
+            self.renderer = SpriteRenderer(entity)
+            return
+
+        if isinstance(entity, Camera) and self.camera:
+            raise AttributeError("Camera is already set")
+
+        super().add(entity)
+
+    def remove(self, entity: Entity) -> None:
+        if entity is self.camera:
+            self.camera = None
+            self.renderer = None
+            return
+
+        super().remove(entity)
+
 
 class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
     def start(self) -> None:
-        """Construct a mesh renderer."""
-        self.renderer = MeshRenderer(_CAMERA)
+        """Construct a Mesh renderer."""
+        self.camera = None
+        self.renderer = None
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
-        self.renderer.draw()
+        for entity in self.entities:
+            self.renderer.draw(entity[Mesh], entity[Transform])
 
+    def add(self, entity: Entity) -> None:
+        if isinstance(entity, Camera) and not self.camera:
+            self.camera = entity
+            self.renderer = MeshRenderer(entity)
+            return
 
-class LightSystem(System):
-    """System that renders a light."""
+        if isinstance(entity, Camera) and self.camera:
+            raise AttributeError("Camera is already set")
 
-    def start(self) -> None:
-        """Construct a lamp."""
-        self.renderer = Lamp(_CAMERA)
+        super().add(entity)
 
-    def step(self, delta: float) -> None:
-        """Render each lamp in the scene."""
-        self.renderer.draw()
+    def remove(self, entity: Entity) -> None:
+        if entity is self.camera:
+            self.camera = None
+            self.renderer = None
+            return
+
+        super().remove(entity)
 
 
 class BufferSwapSystem(System):

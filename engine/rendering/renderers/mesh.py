@@ -6,8 +6,11 @@ import glm
 import numpy as np
 import OpenGL.GL as gl
 
-from engine.rendering.camera import Camera
-from engine.rendering.shader import Shader
+from engine.transform import Transform
+
+from .rendering.camera import Camera
+from .rendering.mesh import Mesh
+from .rendering.shader import Shader
 
 __all__ = ["MeshRenderer"]
 
@@ -152,7 +155,7 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self) -> None:
+    def draw(self, mesh: Mesh, transform: Transform) -> None:
         """Draw a mesh on the screen.
 
         Args:
