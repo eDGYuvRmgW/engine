@@ -4,7 +4,6 @@ from typing import Optional
 import glfw
 import OpenGL.GL as gl
 
-from engine.rendering.camera import Camera
 from engine.rendering.icon import Icon
 
 __all__ = ["Window"]

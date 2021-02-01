@@ -14,6 +14,7 @@ class Camera(Entity): # pylint: disable=too-few-public-methods
     def __init__(self, transform: Transform):
         """Initialize Camera attributes."""
         self.transform = transform
+        super.__init__()
 
     @property
     def view(self) -> glm.mat4:

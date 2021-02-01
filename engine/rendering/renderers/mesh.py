@@ -1,7 +1,5 @@
 """Implements rendering meshes."""
 import ctypes
-import math
-import glfw
 import glm
 import numpy as np
 import OpenGL.GL as gl
@@ -91,7 +89,6 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
 
     def __init__(self, shader: Shader = DEFAULT_MESH_SHADER):
         """Initialize OpenGL buffer data."""
-        self.camera = camera
 
         # TODO(@nspevacek): replace with vertices from loaded model once implemented
         vertices = np.array([
@@ -167,26 +164,58 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
         gl.glBindVertexArray(self.vao)
 
         model = glm.mat4(1.0)
-        model = glm.translate(model, glm.vec3(transform.position.x, transform.position.y, transform.position.z))
-        model = glm.rotate(model, glm.vec3(transform.rotation.x, transform.rotation.y, transform.rotation.z))
-        model = glm.scale(model, glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
+        model = glm.translate(model, glm.vec3(transform.position.x,
+                                              transform.position.y,
+                                              transform.position.z))
+        model = glm.rotate(model, glm.vec3(transform.rotation.x,
+                                           transform.rotation.y,
+                                           transform.rotation.z))
+        model = glm.scale(model, glm.vec3(transform.scale.x, transform.scale.y,
+                                          transform.scale.z))
 
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"), 1, gl.GL_FALSE, glm.value_ptr(model))
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"), 1, gl.GL_FALSE, glm.value_ptr(camera.view))
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(camera.projection))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"),
+                              1, gl.GL_FALSE, glm.value_ptr(model))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"),
+                              1, gl.GL_FALSE, glm.value_ptr(camera.view))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"),
+                              1, gl.GL_FALSE, glm.value_ptr(camera.projection))
 
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"), camera.position.x, camera.position.y, camera.position.z)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"), 
+                      camera.position.x, camera.position.y, camera.position.z)
 
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "material.ambient"), 1.0, 0.5, 0.31)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "material.diffuse"), 1.0, 0.5, 0.31)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "material.specular"), 0.5, 0.5, 0.5)
-        gl.glUniform1f(gl.glGetUniformLocation(self.shader.program, "material.shininess"), 32.0)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
+                                               "material.ambient"), 1.0, 0.5, 0.31)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
+                                               "material.diffuse"), 1.0, 0.5, 0.31)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
+                                               "material.specular"), 0.5, 0.5, 0.5)
+        gl.glUniform1f(gl.glGetUniformLocation(self.shader.program,
+                                               "material.shininess"), 32.0)
 
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"), light.position.x, light.position.y, light.position.z)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.direction"), -light.position.x, -light.position.y, -light.position.z)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.ambient"), light.ambient.x, light.ambient.x, light.ambient.x)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.diffuse"), light.diffuse.x, light.diffuse.x, light.diffuse.x)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.specular"), light.diffuse.x, light.diffuse.x, light.diffuse.x)
-        
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"),
+                                               light.position.x,
+                                               light.position.y,
+                                               light.position.z)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
+                                              "light.direction"),
+                                              -light.position.x,
+                                              -light.position.y,
+                                              -light.position.z)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
+                                               "light.ambient"),
+                                               light.ambient.x,
+                                               light.ambient.x,
+                                               light.ambient.x)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
+                                               "light.diffuse"),
+                                               light.diffuse.x,
+                                               light.diffuse.x,
+                                               light.diffuse.x)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
+                                               "light.specular"),
+                                               light.diffuse.x,
+                                               light.diffuse.x,
+                                               light.diffuse.x)
+
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)

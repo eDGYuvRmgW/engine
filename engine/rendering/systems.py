@@ -5,7 +5,7 @@ import OpenGL.GL as gl
 
 from engine.entity import Entity
 from engine.system import System, PipelinedSystem
-from engine.transform import Transform, Vector
+from engine.transform import Transform
 
 from .camera import Camera
 from .lighting import Light
