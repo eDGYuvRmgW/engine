@@ -33,4 +33,4 @@ class Camera(Entity): # pylint: disable=too-few-public-methods
     @property
     def position(self) -> glm.vec3:
         """Return the Camera's position."""
-        return self.camera_pos
+        return self.transform.position

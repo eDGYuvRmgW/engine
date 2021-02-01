@@ -87,7 +87,7 @@ DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
 class MeshRenderer: # pylint: disable=too-few-public-methods
     """A renderer for drawing meshes on the screen."""
 
-    def __init__(self, camera: Camera, shader: Shader = DEFAULT_MESH_SHADER):
+    def __init__(self, shader: Shader = DEFAULT_MESH_SHADER):
         """Initialize OpenGL buffer data."""
         self.camera = camera
 
@@ -155,7 +155,7 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, mesh: Mesh, transform: Transform) -> None:
+    def draw(self, camera: Camera, mesh: Mesh, transform: Transform) -> None:
         """Draw a mesh on the screen.
 
         Args:
@@ -164,32 +164,16 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
         gl.glUseProgram(self.shader.program)
         gl.glBindVertexArray(self.vao)
 
-        cube_positions = [
-            glm.vec3(50.0, 0.0, 0.0),
-            glm.vec3(200.0, 500.0, 0.0),
-            glm.vec3(150.0, 220.0, 0.0),
-            glm.vec3(380.0, 20.0, 0.0),
-            glm.vec3(240.0, 40.0, 0.0),
-            glm.vec3(500.0, 300.0, 0.0),
-            glm.vec3(350.0, 200.0, 0.0),
-            glm.vec3(400.0, 200.0, 0.0),
-            glm.vec3(600.0, 600.0, 0.0),
-            glm.vec3(130.0, 100.0, 0.0)
-        ]
+        model = glm.mat4(1.0)
+        model = glm.translate(model, glm.vec3(transform.position.x, transform.position.y, transform.position.z))
+        model = glm.rotate(model, glm.vec3(transform.rotation.x, transform.rotation.y, transform.rotation.z))
+        model = glm.scale(model, glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
 
-        for i in range(0, 10):
-            model = glm.mat4(1.0)
-            model = glm.translate(model, cube_positions[i])
-            model = glm.rotate(model, float(glfw.get_time() * glm.radians(50.0)), glm.vec3(0.5, 1.0, 0.0))
-            model = glm.scale(model, glm.vec3(25.0))
-            gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"), 1, gl.GL_FALSE, glm.value_ptr(model))
-            gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"), 1, gl.GL_FALSE, glm.value_ptr(model))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"), 1, gl.GL_FALSE, glm.value_ptr(camera.view))
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(camera.projection))
 
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"), 1, gl.GL_FALSE, glm.value_ptr(self.camera.get_view()))
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"), 1, gl.GL_FALSE, glm.value_ptr(self.camera.get_projection()))
-
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"), 450.0, 450.0, 0.0)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"), 0.0, 0.0, 3.0)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"), camera.position.x, camera.position.y, camera.position.z)
 
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "material.ambient"), 1.0, 0.5, 0.31)
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "material.diffuse"), 1.0, 0.5, 0.31)
@@ -200,9 +184,11 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
         diffuse_color = light_color * glm.vec3(0.5)
         ambient_color = diffuse_color * glm.vec3(0.2)
 
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"), 450.0, 450.0, 0.0)
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.direction"), -450.0, -450.0, 0.0)
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.ambient"), ambient_color.x, ambient_color.y, ambient_color.z)
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.diffuse"), diffuse_color.x, diffuse_color.y, diffuse_color.z)
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "light.specular"), 0.5, 0.5, 0.5)
         
+        gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)
