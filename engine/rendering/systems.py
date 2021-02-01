@@ -32,6 +32,7 @@ class RenderingSystem(PipelinedSystem):
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             MeshRenderingSystem(),
+            LightSystem(),
             BufferSwapSystem()
         ])
 
