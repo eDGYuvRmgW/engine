@@ -1,4 +1,4 @@
-"""Implements the camera class."""
+"""Implements the `Camera` class."""
 import glm
 import glfw
 
