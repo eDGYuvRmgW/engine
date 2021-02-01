@@ -1,10 +1,10 @@
 """Classes for rendering objects on a screen."""
-from .camera import * # noqa: F401, F403
+from .camera import *  # noqa: F401, F403
 from .character import *  # noqa: F401, F403
 from .color import *  # noqa: F401, F403
 from .font import *  # noqa: F401, F403
 from .icon import *  # noqa: F401, F403
-from .lighting import * # noqa: F401, F403
+from .lighting import *  # noqa: F401, F403
 from .renderers import *  # noqa: F401, F403
 from .shader import *  # noqa: F401, F403
 from .sprite import *  # noqa: F401, F403

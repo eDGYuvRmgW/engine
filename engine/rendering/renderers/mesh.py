@@ -82,9 +82,10 @@ DEFAULT_FRAGMENT_SHADER = """
 """
 
 DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
-                                       fragment=DEFAULT_FRAGMENT_SHADER)
+                                     fragment=DEFAULT_FRAGMENT_SHADER)
 
-class MeshRenderer: # pylint: disable=too-few-public-methods
+
+class MeshRenderer:  # pylint: disable=too-few-public-methods
     """A renderer for drawing meshes on the screen."""
 
     def __init__(self, shader: Shader = DEFAULT_MESH_SHADER):
@@ -92,48 +93,23 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
 
         # TODO(@nspevacek): replace with vertices from loaded model once implemented
         vertices = np.array([
-            -0.5, -0.5, -0.5,  0.0, 0.0,
-            0.5, -0.5, -0.5,  1.0, 0.0,
-            0.5,  0.5, -0.5,  1.0, 1.0,
-            0.5,  0.5, -0.5,  1.0, 1.0,
-            -0.5,  0.5, -0.5,  0.0, 1.0,
-            -0.5, -0.5, -0.5,  0.0, 0.0,
-
-            -0.5, -0.5,  0.5,  0.0, 0.0,
-             0.5, -0.5,  0.5,  1.0, 0.0,
-             0.5,  0.5,  0.5,  1.0, 1.0,
-             0.5,  0.5,  0.5,  1.0, 1.0,
-            -0.5,  0.5,  0.5,  0.0, 1.0,
-            -0.5, -0.5,  0.5,  0.0, 0.0,
-
-            -0.5,  0.5,  0.5,  1.0, 0.0,
-            -0.5,  0.5, -0.5,  1.0, 1.0,
-            -0.5, -0.5, -0.5,  0.0, 1.0,
-            -0.5, -0.5, -0.5,  0.0, 1.0,
-            -0.5, -0.5,  0.5,  0.0, 0.0,
-            -0.5,  0.5,  0.5,  1.0, 0.0,
-
-             0.5,  0.5,  0.5,  1.0, 0.0,
-             0.5,  0.5, -0.5,  1.0, 1.0,
-             0.5, -0.5, -0.5,  0.0, 1.0,
-             0.5, -0.5, -0.5,  0.0, 1.0,
-             0.5, -0.5,  0.5,  0.0, 0.0,
-             0.5,  0.5,  0.5,  1.0, 0.0,
-
-            -0.5, -0.5, -0.5,  0.0, 1.0,
-             0.5, -0.5, -0.5,  1.0, 1.0,
-             0.5, -0.5,  0.5,  1.0, 0.0,
-             0.5, -0.5,  0.5,  1.0, 0.0,
-            -0.5, -0.5,  0.5,  0.0, 0.0,
-            -0.5, -0.5, -0.5,  0.0, 1.0,
-
-            -0.5,  0.5, -0.5,  0.0, 1.0,
-             0.5,  0.5, -0.5,  1.0, 1.0,
-             0.5,  0.5,  0.5,  1.0, 0.0,
-             0.5,  0.5,  0.5,  1.0, 0.0,
-            -0.5,  0.5,  0.5,  0.0, 0.0,
-            -0.5,  0.5, -0.5,  0.0, 1.0
-        ], dtype=np.float32)
+            -0.5, -0.5, -0.5, 0.0, 0.0, 0.5, -0.5, -0.5, 1.0, 0.0, 0.5, 0.5,
+            -0.5, 1.0, 1.0, 0.5, 0.5, -0.5, 1.0, 1.0, -0.5, 0.5, -0.5, 0.0, 1.0,
+            -0.5, -0.5, -0.5, 0.0, 0.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.5, -0.5,
+            0.5, 1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 1.0,
+            -0.5, 0.5, 0.5, 0.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, -0.5, 0.5, 0.5,
+            1.0, 0.0, -0.5, 0.5, -0.5, 1.0, 1.0, -0.5, -0.5, -0.5, 0.0, 1.0,
+            -0.5, -0.5, -0.5, 0.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, -0.5, 0.5,
+            0.5, 1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, 0.5, 0.5, -0.5, 1.0, 1.0,
+            0.5, -0.5, -0.5, 0.0, 1.0, 0.5, -0.5, -0.5, 0.0, 1.0, 0.5, -0.5,
+            0.5, 0.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, -0.5, -0.5, -0.5, 0.0, 1.0,
+            0.5, -0.5, -0.5, 1.0, 1.0, 0.5, -0.5, 0.5, 1.0, 0.0, 0.5, -0.5, 0.5,
+            1.0, 0.0, -0.5, -0.5, 0.5, 0.0, 0.0, -0.5, -0.5, -0.5, 0.0, 1.0,
+            -0.5, 0.5, -0.5, 0.0, 1.0, 0.5, 0.5, -0.5, 1.0, 1.0, 0.5, 0.5, 0.5,
+            1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, -0.5, 0.5, 0.5, 0.0, 0.0, -0.5,
+            0.5, -0.5, 0.0, 1.0
+        ],
+                            dtype=np.float32)
 
         self.shader = shader
 
@@ -154,7 +130,8 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, camera: Camera, light: Light, mesh: Mesh, transform: Transform) -> None:
+    def draw(self, camera: Camera, light: Light, mesh: Mesh,
+             transform: Transform) -> None:
         """Draw a mesh on the screen.
 
         Args:
@@ -164,58 +141,58 @@ class MeshRenderer: # pylint: disable=too-few-public-methods
         gl.glBindVertexArray(self.vao)
 
         model = glm.mat4(1.0)
-        model = glm.translate(model, glm.vec3(transform.position.x,
-                                              transform.position.y,
-                                              transform.position.z))
-        model = glm.rotate(model, glm.vec3(transform.rotation.x,
-                                           transform.rotation.y,
-                                           transform.rotation.z))
-        model = glm.scale(model, glm.vec3(transform.scale.x, transform.scale.y,
-                                          transform.scale.z))
+        model = glm.translate(
+            model,
+            glm.vec3(transform.position.x, transform.position.y,
+                     transform.position.z))
+        model = glm.rotate(
+            model,
+            glm.vec3(transform.rotation.x, transform.rotation.y,
+                     transform.rotation.z))
+        model = glm.scale(
+            model,
+            glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
 
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "model"),
-                              1, gl.GL_FALSE, glm.value_ptr(model))
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "view"),
-                              1, gl.GL_FALSE, glm.value_ptr(camera.view))
-        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.shader.program, "projection"),
-                              1, gl.GL_FALSE, glm.value_ptr(camera.projection))
+        gl.glUniformMatrix4fv(
+            gl.glGetUniformLocation(self.shader.program, "model"), 1,
+            gl.GL_FALSE, glm.value_ptr(model))
+        gl.glUniformMatrix4fv(
+            gl.glGetUniformLocation(self.shader.program, "view"), 1,
+            gl.GL_FALSE, glm.value_ptr(camera.view))
+        gl.glUniformMatrix4fv(
+            gl.glGetUniformLocation(self.shader.program, "projection"), 1,
+            gl.GL_FALSE, glm.value_ptr(camera.projection))
 
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"), 
-                      camera.position.x, camera.position.y, camera.position.z)
+        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"),
+                       camera.position.x, camera.position.y, camera.position.z)
 
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
-                                               "material.ambient"), 1.0, 0.5, 0.31)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
-                                               "material.diffuse"), 1.0, 0.5, 0.31)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
-                                               "material.specular"), 0.5, 0.5, 0.5)
-        gl.glUniform1f(gl.glGetUniformLocation(self.shader.program,
-                                               "material.shininess"), 32.0)
+        gl.glUniform3f(
+            gl.glGetUniformLocation(self.shader.program, "material.ambient"),
+            1.0, 0.5, 0.31)
+        gl.glUniform3f(
+            gl.glGetUniformLocation(self.shader.program, "material.diffuse"),
+            1.0, 0.5, 0.31)
+        gl.glUniform3f(
+            gl.glGetUniformLocation(self.shader.program, "material.specular"),
+            0.5, 0.5, 0.5)
+        gl.glUniform1f(
+            gl.glGetUniformLocation(self.shader.program, "material.shininess"),
+            32.0)
 
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"),
-                                               light.position.x,
-                                               light.position.y,
-                                               light.position.z)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
-                                              "light.direction"),
-                                              -light.position.x,
-                                              -light.position.y,
-                                              -light.position.z)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
-                                               "light.ambient"),
-                                               light.ambient.x,
-                                               light.ambient.x,
-                                               light.ambient.x)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
-                                               "light.diffuse"),
-                                               light.diffuse.x,
-                                               light.diffuse.x,
-                                               light.diffuse.x)
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program,
-                                               "light.specular"),
-                                               light.diffuse.x,
-                                               light.diffuse.x,
-                                               light.diffuse.x)
+                       light.position.x, light.position.y, light.position.z)
+        gl.glUniform3f(
+            gl.glGetUniformLocation(self.shader.program, "light.direction"),
+            -light.position.x, -light.position.y, -light.position.z)
+        gl.glUniform3f(
+            gl.glGetUniformLocation(self.shader.program, "light.ambient"),
+            light.ambient.x, light.ambient.x, light.ambient.x)
+        gl.glUniform3f(
+            gl.glGetUniformLocation(self.shader.program, "light.diffuse"),
+            light.diffuse.x, light.diffuse.x, light.diffuse.x)
+        gl.glUniform3f(
+            gl.glGetUniformLocation(self.shader.program, "light.specular"),
+            light.diffuse.x, light.diffuse.x, light.diffuse.x)
 
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)

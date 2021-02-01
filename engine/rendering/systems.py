@@ -14,12 +14,12 @@ from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
 
-_LIGHTS = [Light(
-    position = glm.vec3(450.0, 450.0, 0.0),
-    ambient = glm.vec3(0.2),
-    diffuse = glm.vec3(0.5),
-    specular = glm.vec3(1.0)
-)]
+_LIGHTS = [
+    Light(position=glm.vec3(450.0, 450.0, 0.0),
+          ambient=glm.vec3(0.2),
+          diffuse=glm.vec3(0.5),
+          specular=glm.vec3(1.0))
+]
 
 
 class RenderingSystem(PipelinedSystem):
@@ -125,7 +125,8 @@ class MeshRenderingSystem(System):
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
         for entity in self.entities:
-            self.renderer.draw(self.camera, _LIGHTS[0], entity[Mesh], entity[Transform])
+            self.renderer.draw(self.camera, _LIGHTS[0], entity[Mesh],
+                               entity[Transform])
 
     def add(self, entity: Entity) -> None:
         if isinstance(entity, Camera) and not self.camera:

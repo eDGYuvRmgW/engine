@@ -8,7 +8,7 @@ from engine.transform import Transform
 __all__ = ["Camera"]
 
 
-class Camera(Entity): # pylint: disable=too-few-public-methods
+class Camera(Entity):  # pylint: disable=too-few-public-methods
     """An object representing the game's Camera."""
 
     def __init__(self, transform: Transform):
@@ -19,7 +19,8 @@ class Camera(Entity): # pylint: disable=too-few-public-methods
     @property
     def view(self) -> glm.mat4:
         """Return the Camera's view matrix."""
-        position = glm.vec3(self.transform.x, self.transform.y, self.transform.z)
+        position = glm.vec3(self.transform.x, self.transform.y,
+                            self.transform.z)
         front = glm.vec3(0.0, 0.0, -1.0)
         up = glm.vec3(0.0, 1.0, 0.0)
         return glm.lookAt(position, position + front, up)
