@@ -7,11 +7,13 @@ from engine.system import System, PipelinedSystem
 from engine.transform import Transform
 
 from .camera import Camera
-from .lighting import Lamp
+from .lighting import Light
 from .mesh import Mesh
 from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
+
+_LIGHTS = [Light()]
 
 
 class RenderingSystem(PipelinedSystem):
@@ -24,6 +26,7 @@ class RenderingSystem(PipelinedSystem):
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             MeshRenderingSystem(),
+            LightSystem(),
             BufferSwapSystem()
         ])
 
@@ -106,17 +109,17 @@ class SpriteRenderingSystem(System):
 
 
 class MeshRenderingSystem(System):
-    """System that renders a mesh."""
+    """System that renders a Mesh."""
 
     def start(self) -> None:
-        """Construct a Mesh renderer."""
+        """Construct a mesh renderer."""
         self.camera = None
         self.renderer = None
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
         for entity in self.entities:
-            self.renderer.draw(entity[Mesh], entity[Transform])
+            self.renderer.draw(self.camera, _LIGHTS[0], entity[Mesh], entity[Transform])
 
     def add(self, entity: Entity) -> None:
         if isinstance(entity, Camera) and not self.camera:
