@@ -8,11 +8,11 @@ import OpenGL.GL as gl
 
 from engine.transform import Transform
 
-from .rendering.camera import Camera
-from .rendering.mesh import Mesh
-from .rendering.shader import Shader
+from engine.rendering.camera import Camera
+from engine.rendering.mesh import Mesh
+from engine.rendering.shader import Shader
 
-from .lighting.light import Light
+from engine.rendering.lighting.light import Light
 
 __all__ = ["MeshRenderer"]
 

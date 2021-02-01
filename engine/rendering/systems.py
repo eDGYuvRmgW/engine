@@ -1,10 +1,11 @@
 """Implements rendering-related classes that subclass `System`."""
 import glfw
+import glm
 import OpenGL.GL as gl
 
 from engine.entity import Entity
 from engine.system import System, PipelinedSystem
-from engine.transform import Transform
+from engine.transform import Transform, Vector
 
 from .camera import Camera
 from .lighting import Light
@@ -13,7 +14,12 @@ from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
 
-_LIGHTS = [Light()]
+_LIGHTS = [Light(
+    position = glm.vec3(450.0, 450.0, 0.0),
+    ambient = glm.vec3(0.2),
+    diffuse = glm.vec3(0.5),
+    specular = glm.vec3(1.0)
+)]
 
 
 class RenderingSystem(PipelinedSystem):
@@ -26,7 +32,6 @@ class RenderingSystem(PipelinedSystem):
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             MeshRenderingSystem(),
-            LightSystem(),
             BufferSwapSystem()
         ])
 
@@ -139,6 +144,27 @@ class MeshRenderingSystem(System):
             return
 
         super().remove(entity)
+
+
+class LightSystem(System):
+    """System that adds and removes lights."""
+
+    def add(self, entity: Entity):
+        """Add a light to the scene."""
+        if not isinstance(entity, Light):
+            raise ValueError("Specified entity is not a Light")
+
+        _LIGHTS.append(entity)
+
+    def remove(self, entity: Entity):
+        """Remove a light from the scene."""
+        if not isinstance(entity, Light):
+            raise ValueError("Specified entity is not a Light")
+
+        if entity not in _LIGHTS:
+            raise ValueError("Light not found in scene")
+
+        _LIGHTS.remove(entity)
 
 
 class BufferSwapSystem(System):
