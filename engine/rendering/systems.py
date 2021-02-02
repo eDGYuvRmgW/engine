@@ -5,7 +5,7 @@ import OpenGL.GL as gl
 
 from engine.entity import Entity
 from engine.system import System, PipelinedSystem
-from engine.transform import Transform
+from engine.transform import Transform, Vector
 
 from .camera import Camera
 from .lighting import Light
@@ -15,10 +15,10 @@ from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
 
 _LIGHTS = [
-    Light(position=glm.vec3(450.0, 450.0, 0.0),
-          ambient=glm.vec3(0.2),
-          diffuse=glm.vec3(0.5),
-          specular=glm.vec3(1.0))
+    Light(position=Transform(position=(450.0, 450.0, 0.0)),
+          ambient=Vector(0.2, 0.2, 0.2),
+          diffuse=Vector(0.5, 0.5, 0.5),
+          specular=Vector(1.0, 1.0, 1.0))
 ]
 
 
@@ -32,7 +32,6 @@ class RenderingSystem(PipelinedSystem):
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             MeshRenderingSystem(),
-            LightSystem(),
             BufferSwapSystem()
         ])
 
@@ -51,32 +50,12 @@ class TextRenderingSystem(System):
     REQUIRED_COMPONENTS = Transform, Text
 
     def start(self) -> None:
-        self.camera = None
-        self.renderer = None
+        self.renderer = TextRenderer()
 
     def step(self, delta: float) -> None:
         """Render text in the scene."""
         for entity in self.entities:
             self.renderer.draw(entity[Text], entity[Transform])
-
-    def add(self, entity: Entity) -> None:
-        if isinstance(entity, Camera) and not self.camera:
-            self.camera = entity
-            self.renderer = TextRenderer(entity)
-            return
-
-        if isinstance(entity, Camera) and self.camera:
-            raise AttributeError("Camera is already set")
-
-        super().add(entity)
-
-    def remove(self, entity: Entity) -> None:
-        if entity is self.camera:
-            self.camera = None
-            self.renderer = None
-            return
-
-        super().remove(entity)
 
 
 class SpriteRenderingSystem(System):
@@ -86,32 +65,12 @@ class SpriteRenderingSystem(System):
 
     def start(self) -> None:
         """Construct a sprite renderer."""
-        self.camera = None
-        self.renderer = None
+        self.renderer = SpriteRenderer()
 
     def step(self, delta: float) -> None:
         """Render each sprite in the scene."""
         for entity in self.entities:
             self.renderer.draw(entity[Sprite], entity[Transform])
-
-    def add(self, entity: Entity) -> None:
-        if isinstance(entity, Camera) and not self.camera:
-            self.camera = entity
-            self.renderer = SpriteRenderer(entity)
-            return
-
-        if isinstance(entity, Camera) and self.camera:
-            raise AttributeError("Camera is already set")
-
-        super().add(entity)
-
-    def remove(self, entity: Entity) -> None:
-        if entity is self.camera:
-            self.camera = None
-            self.renderer = None
-            return
-
-        super().remove(entity)
 
 
 class MeshRenderingSystem(System):
@@ -125,8 +84,7 @@ class MeshRenderingSystem(System):
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
         for entity in self.entities:
-            self.renderer.draw(self.camera, _LIGHTS[0], entity[Mesh],
-                               entity[Transform])
+            self.renderer.draw(_LIGHTS[0], entity[Mesh], entity[Transform])
 
     def add(self, entity: Entity) -> None:
         if isinstance(entity, Camera) and not self.camera:
@@ -135,7 +93,7 @@ class MeshRenderingSystem(System):
             return
 
         if isinstance(entity, Camera) and self.camera:
-            raise AttributeError("Camera is already set")
+            raise ValueError("MeshRenderer already has a Camera attached.")
 
         super().add(entity)
 
@@ -146,27 +104,6 @@ class MeshRenderingSystem(System):
             return
 
         super().remove(entity)
-
-
-class LightSystem(System):
-    """System that adds and removes lights."""
-
-    def add(self, entity: Entity):
-        """Add a light to the scene."""
-        if not isinstance(entity, Light):
-            raise ValueError("Specified entity is not a Light")
-
-        _LIGHTS.append(entity)
-
-    def remove(self, entity: Entity):
-        """Remove a light from the scene."""
-        if not isinstance(entity, Light):
-            raise ValueError("Specified entity is not a Light")
-
-        if entity not in _LIGHTS:
-            raise ValueError("Light not found in scene")
-
-        _LIGHTS.remove(entity)
 
 
 class BufferSwapSystem(System):

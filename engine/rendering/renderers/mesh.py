@@ -1,8 +1,8 @@
 """Implements rendering meshes."""
 import ctypes
-import glm
 import numpy as np
 import OpenGL.GL as gl
+import glm
 
 from engine.transform import Transform
 
@@ -88,8 +88,9 @@ DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
 class MeshRenderer:  # pylint: disable=too-few-public-methods
     """A renderer for drawing meshes on the screen."""
 
-    def __init__(self, shader: Shader = DEFAULT_MESH_SHADER):
+    def __init__(self, camera: Camera, shader: Shader = DEFAULT_MESH_SHADER):
         """Initialize OpenGL buffer data."""
+        self.camera = camera
 
         # TODO(@nspevacek): replace with vertices from loaded model once implemented
         vertices = np.array([
@@ -130,7 +131,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, camera: Camera, light: Light, mesh: Mesh,
+    def draw(self, light: Light, mesh: Mesh, # pylint: disable=unused-argument
              transform: Transform) -> None:
         """Draw a mesh on the screen.
 
@@ -158,13 +159,15 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             gl.GL_FALSE, glm.value_ptr(model))
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "view"), 1,
-            gl.GL_FALSE, glm.value_ptr(camera.view))
+            gl.GL_FALSE, glm.value_ptr(self.camera.view))
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "projection"), 1,
-            gl.GL_FALSE, glm.value_ptr(camera.projection))
+            gl.GL_FALSE, glm.value_ptr(self.camera.projection))
 
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"),
-                       camera.position.x, camera.position.y, camera.position.z)
+                       self.camera.transform.position.x, 
+                       self.camera.transform.position.y, 
+                       self.camera.transform.position.z)
 
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "material.ambient"),
