@@ -1,5 +1,5 @@
 """Implements the `InputSystem` class."""
-from engine.system import PipelinedSystem
+from flaris.system import PipelinedSystem
 
 from .key import KeyboardHandlingSystem
 

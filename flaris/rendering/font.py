@@ -5,7 +5,7 @@ import freetype
 import glm  # pytype: disable=import-error
 import OpenGL.GL as gl
 
-from engine.rendering.character import Character
+from flaris.rendering.character import Character
 
 __all__ = ["Font"]
 

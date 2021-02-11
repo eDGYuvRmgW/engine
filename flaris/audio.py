@@ -1,7 +1,7 @@
 """Implements classes for audio playback.
 
 Example:
-    >>> from engine import resource
+    >>> from flaris import resource
     >>> music = AudioSource("music/theme.wav", loop=True)
     >>> music.play()
     >>> import time
