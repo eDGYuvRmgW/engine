@@ -1,8 +1,8 @@
-"""Unit tests for engine.rendering.window."""
+"""Unit tests for flaris.rendering.window."""
 
 
 class TestWindow:  # pylint: disable=too-few-public-methods
-    """Unit tests for engine.rendering.window.Window."""
+    """Unit tests for flaris.rendering.window.Window."""
 
     def testInit(self):
         pass

@@ -8,11 +8,11 @@ import glm  # pytype: disable=import-error
 import OpenGL.GL as gl
 import numpy as np
 
-from engine.rendering.shader import Shader
+from flaris.rendering.shader import Shader
 
 if TYPE_CHECKING:
-    from engine.transform import Transform
-    from engine.rendering.text import Text
+    from flaris.transform import Transform
+    from flaris.rendering.text import Text
 
 __all__ = ["TextRenderer"]
 

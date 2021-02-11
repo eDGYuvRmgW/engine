@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
-from engine import Direction, Entity, Game, Transform
-from engine.rendering import Sprite, Text
-from engine.inputs import key
+from flaris import Direction, Entity, Game, Transform
+from flaris.rendering import Sprite, Text
+from flaris.inputs import key
 
 if TYPE_CHECKING:
-    from engine import Transform
+    from flaris import Transform
 
 
 class Box(Entity):

@@ -1,7 +1,7 @@
 """Implements the `Sprite` class."""
 from dataclasses import dataclass
 
-from engine.component import Component
+from flaris.component import Component
 
 from .color import Color
 from .texture import Texture
