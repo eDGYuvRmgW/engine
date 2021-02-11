@@ -1,11 +1,11 @@
 """Implements the `Text` class."""
 from dataclasses import dataclass
 
-from engine.component import Component
+from flaris.component import Component
 
-from engine import assets
-from engine.rendering.color import Color
-from engine.rendering.font import Font
+from flaris import assets
+from flaris.rendering.color import Color
+from flaris.rendering.font import Font
 
 __all__ = ["Text"]
 

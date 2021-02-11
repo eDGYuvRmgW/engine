@@ -6,7 +6,16 @@ from .component import Component, ComponentError
 __all__ = ["Entity"]
 
 
-class Entity:
+class EntityMeta(type):
+
+    def __init__(cls, name, bases, dct):
+        cls._components = {}
+
+    def __setattr__(cls, attr, value):
+        return super().__setattr__(attr, value)
+
+
+class Entity(meta=EntityMeta):
     """A collection of components representing a particular object.
 
     You should use this as the base class for all game objects.

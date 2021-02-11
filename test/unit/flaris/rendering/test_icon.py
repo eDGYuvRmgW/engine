@@ -1,9 +1,9 @@
-"""Unit tests for the engine.rendering.icon module."""
-from engine.rendering import Icon
+"""Unit tests for the flaris.rendering.icon module."""
+from flaris.rendering import Icon
 
 
 class TestIcon:
-    """Unit tests for engine.rendering.Icon class."""
+    """Unit tests for flaris.rendering.Icon class."""
 
     def testInit(self):
         icon = Icon("textures/icon.png")

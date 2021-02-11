@@ -2,8 +2,8 @@
 import glfw
 import OpenGL.GL as gl
 
-from engine.system import System, PipelinedSystem
-from engine.transform import Transform
+from flaris.system import System, PipelinedSystem
+from flaris.transform import Transform
 
 from .sprite import Sprite
 from .text import Text
@@ -37,11 +37,33 @@ class TextRenderingSystem(System):
     REQUIRED_COMPONENTS = Transform, Text
 
     def start(self) -> None:
-        """Construct a text renderer."""
-        self.renderer = TextRenderer()
+        self.camera = None
+        self.renderer = None
+
+    def add(self, entity: Entity) -> None:
+        if isinstance(entity, Camera) and not self.camera:
+            self.camera = camera
+            self.renderer = TextRenderer(camera)
+            return
+
+        if isinstance(entity, Camera) and self.camera:
+            raise Error("camera already set")
+
+        super().add(entity)
+
+    def remove(self, entity: Entity) -> None:
+        if entity is self.camera:
+            self.camera = None
+            self.renderer = None
+            return
+
+        super().remove(entity)
 
     def step(self, delta: float) -> None:
         """Render text in the scene."""
+        if not self.renderer:
+            raise RuntimeError("renderer not initalied")
+
         for entity in self.entities:
             self.renderer.draw(entity[Text], entity[Transform])
 

@@ -17,14 +17,14 @@ install_requires = [
 ]
 
 setuptools.setup(
-    name="engine",
+    name="flaris",
     version="0.1.0",
     author="Balaji Veeramani, Haiwen Dai, Jordi Aviles, Nicholas Spevacek",
     author_email="bveeramani@berkeley.edu",
     description="A lightweight and easy-to-use game development framework.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/eDGYuvRmgW/engine",
+    url="https://github.com/eDGYuvRmgW/flaris",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -32,6 +32,6 @@ setuptools.setup(
     ],
     install_requires=install_requires,
     include_package_data=True,
-    package_data={"engine": ["assets/fonts/*"]},
+    package_data={"flaris": ["assets/fonts/*"]},
     python_requires='>=3.7'
 )

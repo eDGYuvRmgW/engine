@@ -8,11 +8,11 @@ import glm  # pytype: disable=import-error
 import OpenGL.GL as gl
 import numpy as np
 
-from engine.rendering.shader import Shader
+from flaris.rendering.shader import Shader
 
 if TYPE_CHECKING:
-    from engine.transform import Transform
-    from engine.rendering.text import Text
+    from flaris.transform import Transform
+    from flaris.rendering.text import Text
 
 __all__ = ["TextRenderer"]
 
@@ -52,7 +52,7 @@ DEFAULT_TEXT_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
 class TextRenderer:  # noqa: E241  # pylint: disable=too-few-public-methods
     """A renderer for rendering text on the screen."""
 
-    def __init__(self, shader: Shader = DEFAULT_TEXT_SHADER):
+    def __init__(self, camera: Camera, shader: Shader = DEFAULT_TEXT_SHADER):
         """Initialize this renderer.
 
         Args:
