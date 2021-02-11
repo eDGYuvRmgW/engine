@@ -19,7 +19,7 @@ install_requires = [
 setuptools.setup(
     name="flaris",
     version="0.1.0",
-    author="Balaji Veeramani, Haiwen Dai, Jordi Aviles, Nicholas Spevacek",
+    author="Balaji Veeramani and Nicholas Spevacek",
     author_email="bveeramani@berkeley.edu",
     description="A lightweight and easy-to-use game development framework.",
     long_description=long_description,
