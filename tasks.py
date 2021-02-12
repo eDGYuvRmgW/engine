@@ -107,7 +107,7 @@ def test(c, quick=True):  # pylint: disable=unused-argument
 
 
 @task
-def clean(c):
+def clean(c):  # pylint: disable=unused-argument
     """Delete files that are normally created by building the program."""
     if os.path.exists("build"):
         shutil.rmtree("build")
