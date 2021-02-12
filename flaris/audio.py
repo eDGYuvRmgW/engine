@@ -142,6 +142,11 @@ class AudioSource:
             path: Path to an audio file.
             loop: If true, then loop the audio indefinitely.
         """
+        if not os.path.exists(path):
+            raise ValueError(
+                f"Expected to find an audio file at \"{path}\", but a file "
+                f"does not exist at that path.")
+
         _SOURCES.append(self)
 
         audio_file = AudioFile(path)

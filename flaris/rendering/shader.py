@@ -29,6 +29,15 @@ class Shader:  # pylint: disable=too-few-public-methods
             fragment: Path to the fragment shader relative to the assets
                 directory.
         """
+        if not os.path.exists(vertex):
+            raise ValueError(
+                f"Expected to find a vertex shader at \"{vertex}\", but a file "
+                f"does not exist at that path.")
+        if not os.path.exists(fragment):
+            raise ValueError(
+                f"Expected to find a fragment shader at \"{fragment}\", but a "
+                f"file does not exist at that path.")
+
         self.vertex_path = vertex
         with open(self.vertex_path) as file:
             self.vertex_source = file.read()

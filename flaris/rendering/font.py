@@ -1,4 +1,5 @@
 """Implements the `Font` class."""
+import os
 from typing import Dict
 
 import freetype
@@ -27,6 +28,11 @@ class Font:  # pylint: disable=too-few-public-methods
             path: Path to a font file relative to the assets directory.
             size: The font size in points.
         """
+        if not os.path.exists(path):
+            raise ValueError(
+                f"Expected to find a font file at \"{path}\", but a file does "
+                f"not exist at that path.")
+
         self.path = path
         self.size = size
         self._characters = {}

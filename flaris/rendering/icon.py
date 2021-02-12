@@ -1,4 +1,6 @@
 """Implements the `Icon` class."""
+import os
+
 from PIL import Image
 
 __all__ = ["Icon"]
@@ -36,6 +38,11 @@ class Icon:  # pylint: disable=too-few-public-methods
             path: A path to an image. The path should be relative to the assets
                 directory.
         """
+        if not os.path.exists(path):
+            raise ValueError(
+                f"Expected to find an image at \"{path}\", but a file does not "
+                f"exist at that path.")
+
         self.path = path
         image = Image.open(path)
         self.images = [image.resize((size, size)) for size in self.sizes]
