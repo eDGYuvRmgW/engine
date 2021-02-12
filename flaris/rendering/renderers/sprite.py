@@ -54,8 +54,7 @@ class SpriteRenderer:  # pylint: disable=too-few-public-methods
         vertices = np.array([
             0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
             1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0
-        ],
-                            dtype=np.float32)
+        ], dtype=np.float32)
 
         self.shader = shader
 
