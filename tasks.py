@@ -1,4 +1,4 @@
-"""Defines shell commands for building and testing the framework."""
+"""Defines shell commands for building and testing the package."""
 import logging
 import os
 import shutil
@@ -108,7 +108,7 @@ def test(c, quick=True):  # pylint: disable=unused-argument
 
 @task
 def clean(c):  # pylint: disable=unused-argument
-    """Delete files that are normally created by building the program."""
+    """Delete files that are normally created by building the package."""
     if os.path.exists("build"):
         shutil.rmtree("build")
     if os.path.exists("dist"):
@@ -119,7 +119,7 @@ def clean(c):  # pylint: disable=unused-argument
 
 @task
 def build(c):
-    """Build the program."""
+    """Build the package."""
     c.run("python -m build")
 
 
