@@ -1,5 +1,7 @@
-"""Defines shell commands for building and testing the framework."""
+"""Defines shell commands for building and testing the package."""
 import logging
+import os
+import shutil
 import sys
 
 from invoke import task
@@ -102,6 +104,23 @@ def test(c, quick=True):  # pylint: disable=unused-argument
 
 
 ################################################################################
+
+
+@task
+def clean(c):  # pylint: disable=unused-argument
+    """Delete files that are normally created by building the package."""
+    if os.path.exists("build"):
+        shutil.rmtree("build")
+    if os.path.exists("dist"):
+        shutil.rmtree("dist")
+    if os.path.exists("flaris.egg-info"):
+        shutil.rmtree("flaris.egg-info")
+
+
+@task
+def build(c):
+    """Build the package."""
+    c.run("python -m build")
 
 
 @task(lint, test)
