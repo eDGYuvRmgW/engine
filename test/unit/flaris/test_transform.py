@@ -110,6 +110,7 @@ class TestTransform:
         transform.rotate(angles)
         assert transform.rotation == expected_rotation
 
+    # pylint: disable=line-too-long
     @pytest.mark.parametrize("transform, expected_string", [
         (Transform(), "Transform()"),
         (Transform(position=Vector(1, 0, 0)),
