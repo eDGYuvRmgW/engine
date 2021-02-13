@@ -2,7 +2,7 @@
 import glfw
 import OpenGL.GL as gl
 
-from flaris.system import System, PipelinedSystem
+from flaris.system import System, SequentialSystem
 from flaris.transform import Transform
 
 from .sprite import Sprite
@@ -10,7 +10,7 @@ from .text import Text
 from .renderers import SpriteRenderer, TextRenderer
 
 
-class RenderingSystem(PipelinedSystem):
+class RenderingSystem(SequentialSystem):
     """System that renders objects in a scene."""
 
     def __init__(self):
