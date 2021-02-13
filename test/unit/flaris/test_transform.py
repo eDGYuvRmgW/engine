@@ -117,8 +117,7 @@ class TestTransform:
         (Transform(position=Vector(1, 0, 0),
                    rotation=Vector(30, 45, 60),
                    scale=Vector(2, 2, 2)),
-         "Transform(position=Vector(1, 0, 0), rotation=Vector(30, 45, 60), scale=Vector(2, 2, 2))"
-        )
+         "Transform(position=Vector(1, 0, 0), rotation=Vector(30, 45, 60), scale=Vector(2, 2, 2))")  # noqa: E501
     ])
     def testRepr(self, transform, expected_string):
         assert repr(transform) == expected_string
