@@ -1,21 +1,24 @@
-"""Unit tests for the flaris.rendering.icon module."""
+"""Unit tests for the `flaris.rendering.icon` module."""
+import os
+
 import pytest
 
 from flaris.rendering import Icon
 
 
 class TestIcon:
-    """Unit tests for flaris.rendering.Icon class."""
+    """Unit tests for the `Icon` class."""
+
+    path = os.path.join(os.path.dirname(__file__), "icon.jpg")
 
     def testInit(self):
-        icon = Icon("textures/icon.png")
+        icon = Icon(self.path)
         for image, size in zip(icon.images, icon.sizes):
             assert image.height == size and image.width == size
 
     def testInit_InvalidPath_RaisesValueError(self):
         with pytest.raises(ValueError):
-            Icon("some-non-existant-icon.otf")
+            Icon("some-non-existant-icon.png")
 
     def testRepr(self):
-        icon = Icon("textures/icon.png")
-        assert repr(icon) == "Icon(path=\"textures/icon.png\")"
+        assert repr(Icon(self.path)) == f"Icon(path=\"{self.path}\")"
