@@ -110,13 +110,15 @@ class TestTransform:
         transform.rotate(angles)
         assert transform.rotation == expected_rotation
 
-    def testRepr(self):
-        transform = Transform(position=Vector(0, 0, 0),
-                              rotation=Vector(0, 0, 0),
-                              scale=Vector(1, 1, 1))
-
-        actual = repr(transform)
-        expected = ("Transform(position=Vector(0, 0, 0), "
-                    "rotation=Vector(0, 0, 0), scale=Vector(1, 1, 1))")
-
-        assert actual == expected
+    # pylint: disable=line-too-long
+    @pytest.mark.parametrize("transform, expected_string", [
+        (Transform(), "Transform()"),
+        (Transform(position=Vector(1, 0, 0)),
+         "Transform(position=Vector(1, 0, 0))"),
+        (Transform(position=Vector(1, 0, 0),
+                   rotation=Vector(30, 45, 60),
+                   scale=Vector(2, 2, 2)),
+         "Transform(position=Vector(1, 0, 0), rotation=Vector(30, 45, 60), scale=Vector(2, 2, 2))")  # noqa: E501
+    ])
+    def testRepr(self, transform, expected_string):
+        assert repr(transform) == expected_string
