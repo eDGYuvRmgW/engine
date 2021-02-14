@@ -9,7 +9,7 @@ from .component import ComponentError
 if TYPE_CHECKING:
     from .entity import Entity
 
-__all__ = ["System", "PipelinedSystem", "UpdateSystem"]
+__all__ = ["System", "SequentialSystem", "UpdateSystem"]
 
 
 class System(abc.ABC):
@@ -89,14 +89,14 @@ class System(abc.ABC):
         return iter(self._entities)
 
 
-class PipelinedSystem:
+class SequentialSystem:
     """A collection of systems run sequentially."""
 
     def __init__(self, systems: List[System]):
         """Initialize the systems.
 
         Args:
-            systems: An ordered collection of systems to pipeline.
+            systems: An ordered collection of systems to run.
         """
         self.systems = systems
 
@@ -105,12 +105,12 @@ class PipelinedSystem:
         return any(entity in system for system in self.systems)
 
     def start(self) -> None:
-        """Set up each system in the pipeline."""
+        """Set up each system sequentially."""
         for system in self.systems:
             system.start()
 
     def exit(self) -> None:
-        """Exit each system in the pipeline."""
+        """Exit each system sequentially."""
         for system in self.systems:
             system.exit()
 
@@ -140,7 +140,7 @@ class PipelinedSystem:
                 system.remove(entity)
 
     def step(self, delta: float) -> None:
-        """Advance each system in the pipeline by one step.
+        """Sequentially advance each system by one step.
 
         Args:
             delta: The amount of time required to complete the previous frame.

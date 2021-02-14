@@ -1,12 +1,12 @@
 """Implements the `InputSystem` class."""
-from flaris.system import PipelinedSystem
+from flaris.system import SequentialSystem
 
 from .key import KeyboardHandlingSystem
 
 __all__ = ["InputSystem"]
 
 
-class InputSystem(PipelinedSystem):
+class InputSystem(SequentialSystem):
     """A system that checks for user input."""
 
     def __init__(self):

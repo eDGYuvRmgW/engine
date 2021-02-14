@@ -4,7 +4,7 @@ from __future__ import annotations
 from timeit import default_timer as timer
 from typing import Optional, TYPE_CHECKING
 
-from .system import PipelinedSystem, UpdateSystem
+from .system import SequentialSystem, UpdateSystem
 from .rendering import Window, RenderingSystem
 from .inputs import InputSystem
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 __all__ = ["Game"]
 
 
-class Game(PipelinedSystem):
+class Game(SequentialSystem):
     """Base class for all games."""
 
     _HAS_DYNAMIC_ATTRIBUTES = True
