@@ -208,10 +208,12 @@ class Transform(Component):  # pylint: disable=unused-argument
             string += f"position={self.position}, "
         if self.rotation != Vector(0, 0, 0):
             string += f"rotation={self.rotation}, "
-        if self.scale != Vector(0, 0, 0):
+        if self.scale != Vector(1, 1, 1):
             string += f"scale={self.scale}, "
 
         # Remove trailing ', '
-        string = string[:-len(", ")]
+        if ", " in string:
+            string = string[:-len(", ")]
+
         string += ")"
         return string
