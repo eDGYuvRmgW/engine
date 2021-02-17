@@ -2,12 +2,15 @@
 import glfw
 import OpenGL.GL as gl
 
+from flaris.entity import Entity
+
 from flaris.system import System, SequentialSystem
 from flaris.transform import Transform
 
+from .camera import Camera
 from .sprite import Sprite
 from .text import Text
-from .renderers import SpriteRenderer, TextRenderer
+from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
 
 
 class RenderingSystem(SequentialSystem):
@@ -17,6 +20,7 @@ class RenderingSystem(SequentialSystem):
         """Construct and pipeline the systems needed to render a scene."""
         super().__init__([
             WindowClearSystem(),
+            MeshRenderingSystem(),
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             BufferSwapSystem()
@@ -59,6 +63,41 @@ class SpriteRenderingSystem(System):
         """Render each sprite in the scene."""
         for entity in self.entities:
             self.renderer.draw(entity[Sprite], entity[Transform])
+
+
+class MeshRenderingSystem(System):
+    """System that renders a mesh."""
+
+    def start(self) -> None:
+        """Construct a mesh renderer."""
+        self.camera = None
+        self.renderer = None
+
+    def step(self, delta: float) -> None:
+        """Render each mesh in the scene."""
+        for entity in self.entities:
+            if isinstance(entity, Camera):
+                continue
+            self.renderer.draw(entity[Transform])
+
+    def add(self, entity: Entity) -> None:
+        if isinstance(entity, Camera) and not self.camera:
+            self.camera = entity
+            self.renderer = MeshRenderer(entity)
+            return
+
+        if isinstance(entity, Camera) and self.camera:
+            raise ValueError("MeshRenderer already has a Camera attached.")
+
+        super().add(entity)
+
+    def remove(self, entity: Entity) -> None:
+        if entity is self.camera:
+            self.camera = None
+            self.renderer = None
+            return
+
+        super().remove(entity)
 
 
 class BufferSwapSystem(System):
