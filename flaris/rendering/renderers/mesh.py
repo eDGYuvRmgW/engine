@@ -47,13 +47,14 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods, duplicate-code
         """Initialize OpenGL buffer data."""
         self.camera = camera
 
-        # TODO(@nspevacek): replace with vertices from loaded model once implemented
+        # TODO(@nspevacek): replace with vertices from loaded model once
+        # implemented
         vertices = np.array([
             -0.5, -0.5, -0.5, 0.0, 0.0,
             0.5, -0.5, -0.5, 1.0, 0.0,
             0.5, 0.5, -0.5, 1.0, 1.0,
             0.5, 0.5, -0.5, 1.0, 1.0,
-            -0.5, 0.5, -0.5, 0.0, 1.0
+            -0.5, 0.5, -0.5, 0.0, 1.0,
             -0.5, -0.5, -0.5, 0.0, 0.0,
             -0.5, -0.5, 0.5, 0.0, 0.0,
             0.5, -0.5, 0.5, 1.0, 0.0,
@@ -85,8 +86,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods, duplicate-code
             0.5, 0.5, 0.5, 1.0, 0.0,
             -0.5, 0.5, 0.5, 0.0, 0.0,
             -0.5, 0.5, -0.5, 0.0, 1.0
-        ],
-                            dtype=np.float32)
+        ], dtype=np.float32)
 
         self.shader = shader
 
