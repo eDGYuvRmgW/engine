@@ -55,6 +55,7 @@ class Window:  # pylint: disable=too-few-public-methods
 
         gl.glEnable(gl.GL_BLEND)
         gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+        gl.glEnable(gl.GL_DEPTH_TEST)
 
         glfw.set_framebuffer_size_callback(self.window,
                                            framebuffer_size_callback)

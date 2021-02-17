@@ -1,3 +1,4 @@
 """Implements classes for drawing objects on the screen."""
-from flaris.rendering.renderers.sprite import SpriteRenderer  # noqa: F401
-from flaris.rendering.renderers.text import TextRenderer  # noqa: F401
+from .mesh import MeshRenderer  # noqa: F401
+from .sprite import SpriteRenderer  # noqa: F401
+from .text import TextRenderer  # noqa: F401

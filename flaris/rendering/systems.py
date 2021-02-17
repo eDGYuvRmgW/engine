@@ -2,12 +2,15 @@
 import glfw
 import OpenGL.GL as gl
 
+from flaris.entity import Entity
+
 from flaris.system import System, SequentialSystem
 from flaris.transform import Transform
 
+from .camera import Camera
 from .sprite import Sprite
 from .text import Text
-from .renderers import SpriteRenderer, TextRenderer
+from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
 
 
 class RenderingSystem(SequentialSystem):
@@ -17,6 +20,7 @@ class RenderingSystem(SequentialSystem):
         """Construct and pipeline the systems needed to render a scene."""
         super().__init__([
             WindowClearSystem(),
+            MeshRenderingSystem(),
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             BufferSwapSystem()
@@ -28,7 +32,7 @@ class WindowClearSystem(System):
 
     def step(self, delta: float) -> None:
         """Clear the pixels on the screen."""
-        gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+        gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
 
 
 class TextRenderingSystem(System):
@@ -59,6 +63,47 @@ class SpriteRenderingSystem(System):
         """Render each sprite in the scene."""
         for entity in self.entities:
             self.renderer.draw(entity[Sprite], entity[Transform])
+
+
+class MeshRenderingSystem(System):
+    """System that renders a mesh."""
+
+    def __init__(self):
+        """Initialize camera field for the system."""
+        super().__init__()
+        self.camera = None
+
+    def start(self) -> None:
+        """Construct a mesh renderer."""
+        if self.camera is None:
+            raise RuntimeError(
+                "A Camera object must be added to initialize the MeshRenderer.")
+
+        self.renderer = MeshRenderer(self.camera)
+
+    def step(self, delta: float) -> None:
+        """Render each mesh in the scene."""
+        for entity in self.entities:
+            self.renderer.draw(entity[Transform])
+
+    def add(self, entity: Entity) -> None:
+        """Add an entity to the scene."""
+        if isinstance(entity, Camera) and not self.camera:
+            self.camera = entity
+            return
+
+        if isinstance(entity, Camera) and self.camera:
+            raise ValueError("MeshRenderer already has a Camera attached.")
+
+        super().add(entity)
+
+    def remove(self, entity: Entity) -> None:
+        """Remove an entity from the scene."""
+        if entity is self.camera:
+            raise ValueError(
+                "Cannot remove a Camera attached to the current MeshRenderer.")
+
+        super().remove(entity)
 
 
 class BufferSwapSystem(System):
