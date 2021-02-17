@@ -90,7 +90,6 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
 
         self.shader = shader
 
-        # pylint: disable=duplicate-code
         self.vao = gl.glGenVertexArrays(1)
         vbo = gl.glGenBuffers(1)
 
