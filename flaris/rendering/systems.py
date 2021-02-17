@@ -87,6 +87,7 @@ class MeshRenderingSystem(System):
             self.renderer.draw(entity[Transform])
 
     def add(self, entity: Entity) -> None:
+        """Add an entity to the scene."""
         if isinstance(entity, Camera) and not self.camera:
             self.camera = entity
             return
@@ -97,6 +98,7 @@ class MeshRenderingSystem(System):
         super().add(entity)
 
     def remove(self, entity: Entity) -> None:
+        """Remove an entity from the scene."""
         if entity is self.camera:
             raise ValueError(
                 "Cannot remove a Camera attached to the current MeshRenderer.")
