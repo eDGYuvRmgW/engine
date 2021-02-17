@@ -46,7 +46,7 @@ DEFAULT_SPRITE_SHADER = Shader.compile(vertex=DEFAULT_FRAGMENT_SHADER,
                                        fragment=DEFAULT_VERTEX_SHADER)
 
 
-class SpriteRenderer:  # pylint: disable=too-few-public-methods, duplicate-code
+class SpriteRenderer:  # pylint: disable=too-few-public-methods
     """A renderer for drawing sprites on the screen."""
 
     def __init__(self, shader: Shader = DEFAULT_SPRITE_SHADER):
@@ -58,6 +58,7 @@ class SpriteRenderer:  # pylint: disable=too-few-public-methods, duplicate-code
 
         self.shader = shader
 
+        # pylint: disable=duplicate-code
         self.vao = gl.glGenVertexArrays(1)
         vbo = gl.glGenBuffers(1)
 

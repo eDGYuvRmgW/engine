@@ -40,7 +40,7 @@ DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
                                      fragment=DEFAULT_FRAGMENT_SHADER)
 
 
-class MeshRenderer:  # pylint: disable=too-few-public-methods, duplicate-code
+class MeshRenderer:  # pylint: disable=too-few-public-methods
     """A renderer for drawing meshes on the screen."""
 
     def __init__(self, camera: Camera, shader: Shader = DEFAULT_MESH_SHADER):
@@ -90,6 +90,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods, duplicate-code
 
         self.shader = shader
 
+        # pylint: disable=duplicate-code
         self.vao = gl.glGenVertexArrays(1)
         vbo = gl.glGenBuffers(1)
 
