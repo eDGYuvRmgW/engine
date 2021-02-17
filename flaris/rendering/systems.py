@@ -32,7 +32,7 @@ class WindowClearSystem(System):
 
     def step(self, delta: float) -> None:
         """Clear the pixels on the screen."""
-        gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+        gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
 
 
 class TextRenderingSystem(System):
@@ -70,20 +70,16 @@ class MeshRenderingSystem(System):
 
     def start(self) -> None:
         """Construct a mesh renderer."""
-        self.camera = None
-        self.renderer = None
+        self.renderer = MeshRenderer(self.camera)
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
         for entity in self.entities:
-            if isinstance(entity, Camera):
-                continue
             self.renderer.draw(entity[Transform])
 
     def add(self, entity: Entity) -> None:
         if isinstance(entity, Camera) and not self.camera:
             self.camera = entity
-            self.renderer = MeshRenderer(entity)
             return
 
         if isinstance(entity, Camera) and self.camera:
@@ -94,7 +90,6 @@ class MeshRenderingSystem(System):
     def remove(self, entity: Entity) -> None:
         if entity is self.camera:
             self.camera = None
-            self.renderer = None
             return
 
         super().remove(entity)

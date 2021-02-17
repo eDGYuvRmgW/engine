@@ -9,7 +9,7 @@ __all__ = ["Camera"]
 
 
 class Camera(Entity):  # pylint: disable=too-few-public-methods
-    """An object representing the game's `Camera`."""
+    """An object representing the game's camera."""
 
     def __init__(self, transform: Transform):
         """Initialize `Camera` attributes.
