@@ -68,8 +68,17 @@ class SpriteRenderingSystem(System):
 class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
+    def __init__(self):
+        """Initialize camera field for the system."""
+        super().__init__()
+        self.camera = None
+
     def start(self) -> None:
         """Construct a mesh renderer."""
+        if self.camera is None:
+            raise RuntimeError(
+                "A Camera object must be added to initialize the MeshRenderer.")
+
         self.renderer = MeshRenderer(self.camera)
 
     def step(self, delta: float) -> None:
@@ -89,8 +98,8 @@ class MeshRenderingSystem(System):
 
     def remove(self, entity: Entity) -> None:
         if entity is self.camera:
-            self.camera = None
-            return
+            raise ValueError(
+                "Cannot remove a Camera attached to the current MeshRenderer.")
 
         super().remove(entity)
 

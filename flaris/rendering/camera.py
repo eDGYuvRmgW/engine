@@ -23,7 +23,8 @@ class Camera(Entity):  # pylint: disable=too-few-public-methods
     @property
     def view(self) -> glm.mat4:
         """Return the `Camera` view matrix."""
-        position = glm.vec3(self.transform.position.x, self.transform.position.y,
+        position = glm.vec3(self.transform.position.x,
+                            self.transform.position.y,
                             self.transform.position.z)
         front = glm.vec3(0.0, 0.0, -1.0)
         upwards = glm.vec3(0.0, 1.0, 0.0)

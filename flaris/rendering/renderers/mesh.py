@@ -40,7 +40,7 @@ DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
                                      fragment=DEFAULT_FRAGMENT_SHADER)
 
 
-class MeshRenderer:  # pylint: disable=too-few-public-methods
+class MeshRenderer:  # pylint: disable=too-few-public-methods, duplicate-code
     """A renderer for drawing meshes on the screen."""
 
     def __init__(self, camera: Camera, shader: Shader = DEFAULT_MESH_SHADER):
@@ -107,7 +107,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, transform: Transform) -> None: # pylint: disable=unused-argument
+    def draw(self, transform: Transform) -> None:
         """Draw a mesh on the screen.
 
         Args:
