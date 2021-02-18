@@ -121,6 +121,14 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             model,
             glm.vec3(transform.position.x, transform.position.y,
                      transform.position.z))
+
+        model = glm.rotate(model, glm.radians(transform.rotation.x),
+                           glm.vec3(1.0, 0.0, 0.0))
+        model = glm.rotate(model, glm.radians(transform.rotation.y),
+                           glm.vec3(0.0, 1.0, 0.0))
+        model = glm.rotate(model, glm.radians(transform.rotation.z),
+                           glm.vec3(0.0, 0.0, 1.0))
+
         model = glm.scale(
             model,
             glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
