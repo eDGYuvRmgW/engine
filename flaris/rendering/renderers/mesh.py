@@ -121,7 +121,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             model,
             glm.vec3(transform.position.x, transform.position.y,
                      transform.position.z))
-        
+
         model = glm.translate(
             model,
             glm.vec3(0.5 * transform.scale.x, 0.5 * transform.scale.y,
@@ -138,7 +138,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             glm.vec3(-0.5 * transform.scale.x, -0.5 * transform.scale.y,
             -0.5 * transform.scale.z)
         )
-        
+
         model = glm.scale(
             model,
             glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
