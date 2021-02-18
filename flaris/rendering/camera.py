@@ -35,4 +35,5 @@ class Camera(Entity):  # pylint: disable=too-few-public-methods
         """Return the `Camera` projection matrix."""
         window = glfw.get_current_context()
         window_width, window_height = glfw.get_window_size(window)
-        return glm.ortho(0.0, window_width, 0.0, window_height, -100.0, 100.0)
+        return glm.ortho(-0.5 * window_width, 0.5 * window_width, -0.5 *
+                         window_height, 0.5 * window_height, -100.0, 100.0)
