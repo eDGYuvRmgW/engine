@@ -4,6 +4,7 @@ from __future__ import annotations
 import ctypes
 from typing import TYPE_CHECKING
 
+import glfw
 import glm  # pytype: disable=import-error
 import OpenGL.GL as gl
 import numpy as np
@@ -82,8 +83,13 @@ class TextRenderer:  # noqa: E241  # pylint: disable=too-few-public-methods
             text: The text to render.
             transform: The `Transform` that specifies the position of the text.
         """
+        # pylint: disable=too-many-locals
         gl.glUseProgram(self.shader.program)
-        projection = glm.ortho(0.0, 800, 0, 600)
+
+        window = glfw.get_current_context()
+        window_width, window_height = glfw.get_window_size(window)
+
+        projection = glm.ortho(0.0, window_width, 0, window_height)
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "projection"), 1,
             gl.GL_FALSE, glm.value_ptr(projection))
