@@ -9,10 +9,15 @@ from flaris.rendering.icon import Icon
 __all__ = ["Window"]
 
 
-class Window:  # pylint: disable=too-few-public-methods
+class Window:  # pylint: disable=too-few-public-methods, too-many-arguments
     """An object that encapsulates both a window and a context."""
 
-    def __init__(self, name, width, height, fullscreen, icon: Optional[Icon] = None):
+    def __init__(self,
+                 name,
+                 width,
+                 height,
+                 fullscreen,
+                 icon: Optional[Icon] = None):
         """Open a window.
 
         Args:
@@ -42,9 +47,9 @@ class Window:  # pylint: disable=too-few-public-methods
         glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, gl.GL_TRUE)
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-        self.window = glfw.create_window(self.width, self.height, self.name,
-                                         glfw.get_primary_monitor() if
-                                         self.fullscreen else None, None)
+        self.window = glfw.create_window(
+            self.width, self.height, self.name,
+            glfw.get_primary_monitor() if self.fullscreen else None, None)
 
         if not self.window:
             glfw.terminate()
