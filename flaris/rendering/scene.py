@@ -1,5 +1,5 @@
 """Implements the `Scene` class."""
-from typing import Iterator
+from typing import List
 
 from .camera import Camera
 from .light import Light
@@ -11,7 +11,7 @@ class Scene():  # pylint: disable=too-few-public-methods
     """A collection of objects to be rendered."""
 
     def __init__(self):
-        """Initialize the scene."""
+        """Initialize the scene's camera and lights."""
         self._camera = None
         self._lights = []
 
@@ -27,10 +27,10 @@ class Scene():  # pylint: disable=too-few-public-methods
 
     @camera.setter
     def camera(self, camera: Camera):
-        """Assign a camera to the screen."""
+        """Assign a camera to the scene."""
         self._camera = camera
 
     @property
-    def lights(self) -> Iterator[Light]:
+    def lights(self) -> List[Light]:
         """Return a list of lights in this scene."""
         return self._lights

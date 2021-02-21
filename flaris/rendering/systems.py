@@ -71,7 +71,7 @@ class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
     def __init__(self):
-        """Initialize camera field for the system."""
+        """Initialize the scene."""
         super().__init__()
         self.scene = Scene()
 
@@ -79,7 +79,7 @@ class MeshRenderingSystem(System):
         """Construct a mesh renderer."""
         if self.scene.camera is None:
             raise RuntimeError(
-                "A Camera object must be added to initialize the MeshRenderer.")
+                "A Camera must be added to initialize the MeshRenderer.")
 
         self.renderer = MeshRenderer(self.scene.camera)
 
@@ -105,8 +105,7 @@ class MeshRenderingSystem(System):
     def remove(self, entity: Entity) -> None:
         """Remove an entity from the scene."""
         if entity is self.scene.camera:
-            raise ValueError(
-                "Cannot remove the Camera from the scene.")
+            raise ValueError("Cannot remove the Camera from the scene.")
 
         super().remove(entity)
 

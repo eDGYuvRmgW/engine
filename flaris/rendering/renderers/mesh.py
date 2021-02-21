@@ -1,5 +1,5 @@
 """Implements rendering meshes."""
-from typing import Iterator
+from typing import List
 
 import ctypes
 import numpy as np
@@ -153,11 +153,12 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, transform: Transform, lights: Iterator[Light]) -> None:
+    def draw(self, transform: Transform, lights: List[Light]) -> None:
         """Draw a mesh on the screen.
 
         Args:
             transform: The position, rotation, and scale of the mesh.
+            lights: A list of lights in the current scene.
         """
         gl.glUseProgram(self.shader.program)
         gl.glBindVertexArray(self.vao)
@@ -194,7 +195,8 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                        self.camera.transform.position.y,
                        self.camera.transform.position.z)
 
-        light = lights[0] # temporary
+        # Temporary
+        light = lights[0]
 
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "material.ambient"),
@@ -213,7 +215,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                        light.position.x, light.position.y,
                        light.position.z)
         gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "light.direction"), 
+            gl.glGetUniformLocation(self.shader.program, "light.direction"),
             -light.position.x, -light.position.y, -light.position.z)
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "light.ambient"),
