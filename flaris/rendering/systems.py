@@ -9,6 +9,7 @@ from flaris.transform import Transform
 
 from .camera import Camera
 from .light import Light
+from .scene import Scene
 from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
@@ -73,7 +74,6 @@ class MeshRenderingSystem(System):
         """Initialize camera field for the system."""
         super().__init__()
         self.camera = None
-        self.light = None
 
     def start(self) -> None:
         """Construct a mesh renderer."""
@@ -81,13 +81,7 @@ class MeshRenderingSystem(System):
             raise RuntimeError(
                 "A Camera object must be added to initialize the MeshRenderer.")
 
-        if self.light is None:
-            raise RuntimeError(
-                "A directional Light object must be added to initialize the \
-                MeshRenderer."
-            )
-
-        self.renderer = MeshRenderer(self.camera, self.light)
+        self.renderer = MeshRenderer(self.camera)
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
@@ -103,10 +97,6 @@ class MeshRenderingSystem(System):
         if isinstance(entity, Camera) and self.camera:
             raise ValueError("MeshRenderer already has a Camera attached.")
 
-        if isinstance(entity, Light):
-            self.light = entity
-            return
-
         super().add(entity)
 
     def remove(self, entity: Entity) -> None:
@@ -114,10 +104,6 @@ class MeshRenderingSystem(System):
         if entity is self.camera:
             raise ValueError(
                 "Cannot remove a Camera attached to the current MeshRenderer.")
-
-        if entity is self.light:
-            raise ValueError(
-                "Cannot remove directional light source from the MeshRenderer.")
 
         super().remove(entity)
 

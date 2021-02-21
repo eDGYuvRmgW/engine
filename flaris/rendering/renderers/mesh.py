@@ -1,4 +1,6 @@
 """Implements rendering meshes."""
+from typing import List
+
 import ctypes
 import numpy as np
 import OpenGL.GL as gl
@@ -87,11 +89,9 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
 
     def __init__(self,
                  camera: Camera,
-                 light: Light,
                  shader: Shader = DEFAULT_MESH_SHADER):
         """Initialize OpenGL buffer data."""
         self.camera = camera
-        self.light = light
 
         # TODO(@nspevacek): replace with vertices from loaded model once
         # implemented
@@ -153,7 +153,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, transform: Transform) -> None:
+    def draw(self, transform: Transform, lights: List[Light]) -> None:
         """Draw a mesh on the screen.
 
         Args:
@@ -194,6 +194,8 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                        self.camera.transform.position.y,
                        self.camera.transform.position.z)
 
+        light = lights[0]
+
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "material.ambient"),
             1.0, 0.5, 0.31)
@@ -208,21 +210,20 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             32.0)
 
         gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"),
-                       self.light.position.x, self.light.position.y,
-                       self.light.position.z)
+                       light.position.x, light.position.y,
+                       light.position.z)
         gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program,
-                                    "light.direction"), -self.light.position.x,
-            -self.light.position.y, -self.light.position.z)
+            gl.glGetUniformLocation(self.shader.program, "light.direction"), 
+            -light.position.x, -light.position.y, -light.position.z)
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "light.ambient"),
-            self.light.ambient.x, self.light.ambient.x, self.light.ambient.x)
+            light.ambient.x, light.ambient.y, light.ambient.z)
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "light.diffuse"),
-            self.light.diffuse.x, self.light.diffuse.x, self.light.diffuse.x)
+            light.diffuse.x, light.diffuse.y, light.diffuse.z)
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "light.specular"),
-            self.light.diffuse.x, self.light.diffuse.x, self.light.diffuse.x)
+            light.diffuse.x, light.diffuse.y, light.diffuse.z)
 
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)
