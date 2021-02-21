@@ -83,6 +83,7 @@ class TextRenderer:  # noqa: E241  # pylint: disable=too-few-public-methods
             text: The text to render.
             transform: The `Transform` that specifies the position of the text.
         """
+        # pylint: disable=too-many-locals
         gl.glUseProgram(self.shader.program)
 
         window = glfw.get_current_context()
