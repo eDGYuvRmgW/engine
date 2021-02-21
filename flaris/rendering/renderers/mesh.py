@@ -225,7 +225,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             light.diffuse.x, light.diffuse.y, light.diffuse.z)
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "light.specular"),
-            light.diffuse.x, light.diffuse.y, light.diffuse.z)
+            light.specular.x, light.specular.y, light.specular.z)
 
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)
