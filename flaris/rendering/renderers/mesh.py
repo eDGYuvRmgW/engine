@@ -29,7 +29,7 @@ DEFAULT_VERTEX_SHADER = """
         gl_Position = projection * view * model * vec4(aPos, 1.0);
         FragPos = vec3(model * vec4(aPos, 1.0));
 
-        // TODO(@nspevacek): costly, calculate matrix on CPU instead (like model matrix)
+        // TODO(@nspevacek): costly, calculate matrix on CPU instead
         Normal = mat3(transpose(inverse(model))) * aNormal;
     }
 """
@@ -62,7 +62,7 @@ DEFAULT_FRAGMENT_SHADER = """
 
     void main() {
         vec3 ambient = light.ambient * material.ambient;
-        
+
         vec3 norm = normalize(Normal);
         vec3 lightDir = normalize(-light.direction);
         float diff = max(dot(norm, lightDir), 0.0);
@@ -70,7 +70,7 @@ DEFAULT_FRAGMENT_SHADER = """
 
         vec3 viewDir = normalize(viewPos - FragPos);
         vec3 reflectDir = reflect(-lightDir, norm);
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+        float spec = pow(max(dot(viewDir,reflectDir), 0.0), material.shininess);
         vec3 specular = light.specular * (spec * material.specular);
 
         vec3 result = ambient + diffuse + specular;

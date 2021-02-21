@@ -83,7 +83,8 @@ class MeshRenderingSystem(System):
 
         if self.light is None:
             raise RuntimeError(
-                "A directional Light object must be added to initialize the MeshRenderer."
+                "A directional Light object must be added to initialize the \
+                MeshRenderer."
             )
 
         self.renderer = MeshRenderer(self.camera, self.light)
