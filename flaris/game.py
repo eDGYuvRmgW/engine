@@ -30,14 +30,14 @@ class Game(SequentialSystem):
         self.name = name
         self.icon = icon
 
-    def run(self, width: int, height: int, fullscreen: bool = False) -> None:
+    def run(self, width: int, height: int) -> None:
         """Run the game.
 
         Args:
             width: The width of the window.
             height: The height of the window.
         """
-        with Window(self.name, width, height, fullscreen, self.icon) as window:
+        with Window(self.name, width, height, self.icon) as window:
             self.start()
 
             delta = 0
