@@ -10,14 +10,14 @@ __all__ = ["Scene"]
 class Scene():  # pylint: disable=too-few-public-methods
     """A collection of objects to be rendered."""
 
-    def __init__(self, camera: Camera):
-        """Initialize the scene's camera and directional light."""
-        self._camera = camera
+    def __init__(self):
+        """Initialize the scene."""
+        self._camera = None
         self._lights = []
 
     def add(self, component: Light) -> None:
         """Add a component to the scene."""
-        if component is Light:
+        if isinstance(component, Light):
             self._lights.append(component)
 
     @property
@@ -25,7 +25,12 @@ class Scene():  # pylint: disable=too-few-public-methods
         """Return the camera in this scene."""
         return self._camera
 
+    @camera.setter
+    def camera(self, camera: Camera):
+        """Assign a camera to the screen."""
+        self._camera = camera
+
     @property
-    def lights(self) -> Iterator[Light]
+    def lights(self) -> Iterator[Light]:
         """Return a list of lights in this scene."""
         return self._lights

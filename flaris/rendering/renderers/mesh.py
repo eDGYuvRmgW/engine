@@ -1,5 +1,5 @@
 """Implements rendering meshes."""
-from typing import List
+from typing import Iterator
 
 import ctypes
 import numpy as np
@@ -153,7 +153,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, transform: Transform, lights: List[Light]) -> None:
+    def draw(self, transform: Transform, lights: Iterator[Light]) -> None:
         """Draw a mesh on the screen.
 
         Args:
@@ -194,7 +194,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                        self.camera.transform.position.y,
                        self.camera.transform.position.z)
 
-        light = lights[0]
+        light = lights[0] # temporary
 
         gl.glUniform3f(
             gl.glGetUniformLocation(self.shader.program, "material.ambient"),

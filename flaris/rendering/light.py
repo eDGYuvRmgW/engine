@@ -19,6 +19,6 @@ class Light(Component):  # pylint: disable=too-few-public-methods
     """
 
     position: Vector
-    ambient: Vector
-    diffuse: Vector
-    specular: Vector
+    ambient: Vector = Vector(0.2, 0.2, 0.2)
+    diffuse: Vector = Vector(0.5, 0.5, 0.5)
+    specular: Vector = Vector(1.0, 1.0, 1.0)
