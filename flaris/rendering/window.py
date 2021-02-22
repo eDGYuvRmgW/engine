@@ -25,7 +25,7 @@ class Window:  # pylint: disable=too-few-public-methods
             name: The title of the window.
             width: The width of the window.
             height: The height of the window.
-            fullscreen: If ture, make the window fullscreen.
+            fullscreen: If true, make the window fullscreen.
             icon: The window icon. If no icon is provided, then the default icon
                 for the operating system is used (default: None).
         """
