@@ -12,19 +12,27 @@ __all__ = ["Window"]
 class Window:  # pylint: disable=too-few-public-methods
     """An object that encapsulates both a window and a context."""
 
-    def __init__(self, name, width, height, icon: Optional[Icon] = None):
+    def __init__(self,
+                 name: str,
+                 width: int,
+                 height: int,
+                 fullscreen: bool,
+                 icon: Optional[Icon] = None):
+        # pylint: disable=too-many-arguments
         """Open a window.
 
         Args:
             name: The title of the window.
             width: The width of the window.
             height: The height of the window.
+            fullscreen: If true, make the window fullscreen.
             icon: The window icon. If no icon is provided, then the default icon
                 for the operating system is used (default: None).
         """
         self.name = name
         self.width = width
         self.height = height
+        self.fullscreen = fullscreen
         self.icon = icon
 
         self.window = None
@@ -40,8 +48,9 @@ class Window:  # pylint: disable=too-few-public-methods
         glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, gl.GL_TRUE)
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-        self.window = glfw.create_window(self.width, self.height, self.name,
-                                         None, None)
+        self.window = glfw.create_window(
+            self.width, self.height, self.name,
+            glfw.get_primary_monitor() if self.fullscreen else None, None)
 
         if not self.window:
             glfw.terminate()
