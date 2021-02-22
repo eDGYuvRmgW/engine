@@ -17,8 +17,8 @@ class Window:  # pylint: disable=too-few-public-methods
                  width: int,
                  height: int,
                  fullscreen: bool,
-                 icon: Optional[Icon] = None):  
-                 # pylint: disable=too-many-arguments
+                 icon: Optional[Icon] = None):
+        # pylint: disable=too-many-arguments
         """Open a window.
 
         Args:
