@@ -22,7 +22,7 @@ class RenderingSystem(SequentialSystem):
         """Construct and pipeline the systems needed to render a scene."""
         super().__init__([
             WindowClearSystem(),
-            MeshRenderingSystem(),
+            MeshRenderingSystem(Scene()),
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             BufferSwapSystem()
@@ -70,10 +70,10 @@ class SpriteRenderingSystem(System):
 class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
-    def __init__(self):
+    def __init__(self, scene: Scene):
         """Initialize the scene."""
         super().__init__()
-        self.scene = Scene()
+        self.scene = scene
 
     def start(self) -> None:
         """Construct a mesh renderer."""
