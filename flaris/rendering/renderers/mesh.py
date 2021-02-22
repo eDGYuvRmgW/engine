@@ -1,8 +1,12 @@
 """Implements rendering meshes."""
+from collada import Collada
+
 import ctypes
 import numpy as np
 import OpenGL.GL as gl
 import glm
+
+from flaris import assets
 
 from flaris.transform import Transform
 
@@ -47,8 +51,22 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         """Initialize OpenGL buffer data."""
         self.camera = camera
 
+        mesh = Collada(assets.path("models/cube.dae"))
+        triset = mesh.geometries[0].primitives[0]
+
+        vertices = np.array([], dtype=np.float32)
+
+        print(triset.vertex[triset.vertex_index])
+
+        for _, vertex in enumerate(triset.vertex[triset.vertex_index]):
+            vertices = np.append(vertices, vertex)
+
+
+        print(vertices)
+
         # TODO(@nspevacek): replace with vertices from loaded model once
         # implemented
+        """
         vertices = np.array([
             -0.5, -0.5, -0.5, 0.0, 0.0,
             0.5, -0.5, -0.5, 1.0, 0.0,
@@ -87,11 +105,12 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             -0.5, 0.5, 0.5, 0.0, 0.0,
             -0.5, 0.5, -0.5, 0.0, 1.0
         ], dtype=np.float32)
-
+        """
         self.shader = shader
 
         self.vao = gl.glGenVertexArrays(1)
         vbo = gl.glGenBuffers(1)
+        ebo = gl.glGenBuffers(1)
 
         gl.glBindVertexArray(self.vao)
 
@@ -99,13 +118,17 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         gl.glBufferData(gl.GL_ARRAY_BUFFER, vertices.nbytes, vertices,
                         gl.GL_STATIC_DRAW)
 
-        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 20,
+        gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, ebo)
+        gl.glBufferData(gl.GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices,
+                        gl.GL_STATIC_DRAW)
+
+        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 12,
                                  ctypes.c_void_p(0))
         gl.glEnableVertexAttribArray(0)
 
-        gl.glVertexAttribPointer(1, 2, gl.GL_FLOAT, gl.GL_FALSE, 20,
-                                 ctypes.c_void_p(12))
-        gl.glEnableVertexAttribArray(1)
+        #gl.glVertexAttribPointer(1, 2, gl.GL_FLOAT, gl.GL_FALSE, 20,
+        #                         ctypes.c_void_p(12))
+        #gl.glEnableVertexAttribArray(1)
 
     def draw(self, transform: Transform) -> None:
         """Draw a mesh on the screen.
