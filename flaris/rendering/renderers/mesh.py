@@ -196,14 +196,14 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         self.shader.set_vec3("material.specular", 0.5, 0.5, 0.5)
         self.shader.set_float("material.shininess", 32.0)
 
-        self.shader.set_vec3("lightPos", light.position.x,
-                             light.position.y, light.position.z)
+        self.shader.set_vec3("lightPos", light.position.x, light.position.y,
+                             light.position.z)
         self.shader.set_vec3("light.direction", -light.position.x,
                              -light.position.y, -light.position.z)
-        self.shader.set_vec3("light.ambient", light.ambient.x,
-                             light.ambient.y, light.ambient.z)
-        self.shader.set_vec3("light.diffuse", light.diffuse.x,
-                             light.diffuse.y, light.diffuse.z)
+        self.shader.set_vec3("light.ambient", light.ambient.x, light.ambient.y,
+                             light.ambient.z)
+        self.shader.set_vec3("light.diffuse", light.diffuse.x, light.diffuse.y,
+                             light.diffuse.z)
         self.shader.set_vec3("light.specular", light.specular.x,
                              light.specular.y, light.specular.z)
 

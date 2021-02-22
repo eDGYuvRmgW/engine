@@ -84,7 +84,7 @@ class Shader:  # pylint: disable=too-few-public-methods
             value: The mat4 to assign to the uniform.
         """
         gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.program, name), 1,
-                        gl.GL_FALSE, glm.value_ptr(value))
+                              gl.GL_FALSE, glm.value_ptr(value))
 
     @property
     def program(self):
