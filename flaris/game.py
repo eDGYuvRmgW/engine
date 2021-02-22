@@ -36,7 +36,7 @@ class Game(SequentialSystem):
         Args:
             width: The width of the window.
             height: The height of the window.
-            fullscreen: Sets the window to full screen (False by default).
+            fullscreen: If true, make the window fullscreen (default: False).
         """
         with Window(self.name, width, height, fullscreen, self.icon) as window:
             self.start()
