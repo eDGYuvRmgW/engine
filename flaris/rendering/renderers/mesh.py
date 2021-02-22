@@ -180,52 +180,32 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             model,
             glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
 
-        gl.glUniformMatrix4fv(
-            gl.glGetUniformLocation(self.shader.program, "model"), 1,
-            gl.GL_FALSE, glm.value_ptr(model))
-        gl.glUniformMatrix4fv(
-            gl.glGetUniformLocation(self.shader.program, "view"), 1,
-            gl.GL_FALSE, glm.value_ptr(self.camera.view))
-        gl.glUniformMatrix4fv(
-            gl.glGetUniformLocation(self.shader.program, "projection"), 1,
-            gl.GL_FALSE, glm.value_ptr(self.camera.projection))
+        self.shader.set_mat4("model", model)
+        self.shader.set_mat4("view", self.camera.view)
+        self.shader.set_mat4("projection", self.camera.projection)
 
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "viewPos"),
-                       self.camera.transform.position.x,
-                       self.camera.transform.position.y,
-                       self.camera.transform.position.z)
+        self.shader.set_vec3("viewPos", self.camera.transform.position.x,
+                             self.camera.transform.position.y,
+                             self.camera.transform.position.z)
 
         # Temporary
         light = lights[0]
 
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "material.ambient"),
-            1.0, 0.5, 0.31)
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "material.diffuse"),
-            1.0, 0.5, 0.31)
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "material.specular"),
-            0.5, 0.5, 0.5)
-        gl.glUniform1f(
-            gl.glGetUniformLocation(self.shader.program, "material.shininess"),
-            32.0)
+        self.shader.set_vec3("material.ambient", 1.0, 0.5, 0.31)
+        self.shader.set_vec3("material.diffuse", 1.0, 0.5, 0.31)
+        self.shader.set_vec3("material.specular", 0.5, 0.5, 0.5)
+        self.shader.set_float("material.shininess", 32.0)
 
-        gl.glUniform3f(gl.glGetUniformLocation(self.shader.program, "lightPos"),
-                       light.position.x, light.position.y,
-                       light.position.z)
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "light.direction"),
-            -light.position.x, -light.position.y, -light.position.z)
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "light.ambient"),
-            light.ambient.x, light.ambient.y, light.ambient.z)
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "light.diffuse"),
-            light.diffuse.x, light.diffuse.y, light.diffuse.z)
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "light.specular"),
-            light.specular.x, light.specular.y, light.specular.z)
+        self.shader.set_vec3("lightPos", light.position.x,
+                             light.position.y, light.position.z)
+        self.shader.set_vec3("light.direction", -light.position.x,
+                             -light.position.y, -light.position.z)
+        self.shader.set_vec3("light.ambient", light.ambient.x,
+                             light.ambient.y, light.ambient.z)
+        self.shader.set_vec3("light.diffuse", light.diffuse.x,
+                             light.diffuse.y, light.diffuse.z)
+        self.shader.set_vec3("light.specular", light.specular.x,
+                             light.specular.y, light.specular.z)
 
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)

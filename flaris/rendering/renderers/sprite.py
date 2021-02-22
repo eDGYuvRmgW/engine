@@ -97,10 +97,8 @@ class SpriteRenderer:  # pylint: disable=too-few-public-methods
         width = sprite.texture.width * transform.scale.x
         height = sprite.texture.height * transform.scale.y
 
-        gl.glUniform1i(gl.glGetUniformLocation(self.shader.program, "image"), 0)
-        gl.glUniformMatrix4fv(
-            gl.glGetUniformLocation(self.shader.program, "projection"), 1,
-            gl.GL_FALSE, glm.value_ptr(projection))
+        self.shader.set_int("image", 0)
+        self.shader.set_mat4("projection", projection)
 
         model = glm.mat4(1.0)
         model = glm.translate(
@@ -112,13 +110,10 @@ class SpriteRenderer:  # pylint: disable=too-few-public-methods
 
         model = glm.scale(model, glm.vec3(width, height, 1.0))
 
-        gl.glUniformMatrix4fv(
-            gl.glGetUniformLocation(self.shader.program, "model"), 1,
-            gl.GL_FALSE, glm.value_ptr(model))
+        self.shader.set_mat4("model", model)
         # TODO(@bveeramani): Add support for color alpha.
-        gl.glUniform3f(
-            gl.glGetUniformLocation(self.shader.program, "spriteColor"),
-            sprite.color.red, sprite.color.green, sprite.color.blue)
+        self.shader.set_vec3("spriteColor", sprite.color.red,
+                             sprite.color.green, sprite.color.blue)
 
         gl.glBindVertexArray(self.vao)
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 6)
