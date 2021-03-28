@@ -4,10 +4,12 @@ from flaris.entity import Entity
 
 
 class StubComponent(Component):
+    """A simple component used for testing."""
     pass
 
 
 class StubEntity(Entity):
+    """A simple entity used for testing."""
 
     def __init__(self, component: Component):
         super().__init__()

@@ -13,10 +13,12 @@ class Component:  # pylint: disable=too-few-public-methods
     """Raw data for one aspect of an entity."""
 
     def __init__(self):
+        """Initialize instance attributes."""
         self._entity = None
 
     @property
     def entity(self) -> Entity:
+        """Return the entity that this component is attached to."""
         if not hasattr(self, "_entity"):
             raise AttributeError("Cannot attach component before"
                                  "Component.__init__() call.")
@@ -24,6 +26,7 @@ class Component:  # pylint: disable=too-few-public-methods
 
     @entity.setter
     def entity(self, value) -> None:
+        """Set the entity that this component is attached to."""
         if not hasattr(self, "_entity"):
             raise AttributeError("Cannot attach component before"
                                  "Component.__init__() call.")
