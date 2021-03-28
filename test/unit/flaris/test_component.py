@@ -5,7 +5,6 @@ from flaris.entity import Entity
 
 class StubComponent(Component):
     """A simple component used for testing."""
-    pass
 
 
 class StubEntity(Entity):
