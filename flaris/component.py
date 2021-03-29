@@ -1,7 +1,7 @@
 """Implements the `Component` class and the `ComponentError` exception."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from flaris.entity import Entity
@@ -13,7 +13,7 @@ class Component:  # pylint: disable=too-few-public-methods
     """Raw data for one aspect of an entity."""
 
     @property
-    def entity(self) -> Entity:
+    def entity(self) -> Union[None, Entity]:
         """Return the entity that this component is attached to."""
         if not hasattr(self, "_entity"):
             self._entity = None
