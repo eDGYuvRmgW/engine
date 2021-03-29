@@ -16,7 +16,7 @@ class StubEntity(Entity):
 
 
 class TestComponent:
-    """Unit tests for `Component` class."""
+    """Unit tests for the `Component` class."""
 
     def testEntity(self):
         component = StubComponent()
