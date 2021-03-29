@@ -18,8 +18,8 @@ class StubEntity(Entity):
 class TestComponent:
     """Unit tests for `Component` class."""
 
-    def testSimple(self):
+    def testEntity(self):
         component = StubComponent()
+        assert not component.entity
         entity = StubEntity(component)
-        assert entity[StubComponent] is component
         assert component.entity is entity
