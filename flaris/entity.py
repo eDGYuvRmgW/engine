@@ -42,7 +42,7 @@ class Entity:
         try:
             components = self.__dict__["_components"]
         except KeyError as error:
-            raise AttributeError("Cannot attach components before "
+            raise AttributeError("Cannot check components before "
                                  "Entity.__init__() call.") from error
         return key in components
 
