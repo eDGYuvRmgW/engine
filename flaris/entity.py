@@ -39,7 +39,12 @@ class Entity:
 
     def __contains__(self, key: type):
         """Return true if the entity contains a component of the given type."""
-        return key in self._components
+        try:
+            components = self.__dict__["_components"]
+        except KeyError as error:
+            raise AttributeError("Cannot check components before "
+                                 "Entity.__init__() call.") from error
+        return key in components
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Set an instance attribute.
