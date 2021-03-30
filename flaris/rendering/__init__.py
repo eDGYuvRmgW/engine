@@ -5,6 +5,7 @@ from .color import *  # noqa: F401, F403
 from .font import *  # noqa: F401, F403
 from .icon import *  # noqa: F401, F403
 from .light import *  # noqa: F401, F403
+from .mesh import *  # noqa: F401, F403
 from .renderers import *  # noqa: F401, F403
 from .shader import *  # noqa: F401, F403
 from .sprite import *  # noqa: F401, F403
