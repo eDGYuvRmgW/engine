@@ -145,11 +145,11 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         gl.glBufferData(gl.GL_ARRAY_BUFFER, vertices.nbytes, vertices,
                         gl.GL_STATIC_DRAW)
 
-        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 20,
+        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 24,
                                  ctypes.c_void_p(0))
         gl.glEnableVertexAttribArray(0)
 
-        gl.glVertexAttribPointer(1, 2, gl.GL_FLOAT, gl.GL_FALSE, 20,
+        gl.glVertexAttribPointer(1, 3, gl.GL_FLOAT, gl.GL_FALSE, 24,
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
