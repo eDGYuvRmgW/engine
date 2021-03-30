@@ -75,6 +75,7 @@ class Entity:
                                  f"attached.")
 
         components[type(component)] = component
+        component.entity = self
 
     def __delattr__(self, name: str) -> None:
         """Delete an instance attribute.
@@ -102,6 +103,7 @@ class Entity:
                                  "Entity.__init__() call.") from error
 
         del components[type(component)]
+        component.entity = None
 
     def update(self, delta: float):
         """Update this entity.
