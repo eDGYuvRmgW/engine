@@ -32,11 +32,11 @@ DEFAULT_VERTEX_SHADER = """
 DEFAULT_FRAGMENT_SHADER = """
     #version 410 core
     out vec4 FragColor;
-    in vec3 Normal;  
+    in vec3 Normal;
     void main()
     {
         FragColor = vec4(abs(Normal), 1.0);
-    } 
+    }
 """
 
 DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
@@ -112,7 +112,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, transform: Transform, lights: List[Light]) -> None:
+    def draw(self, transform: Transform) -> None:
         """Draw a mesh on the screen.
 
         Args:

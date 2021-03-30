@@ -86,7 +86,7 @@ class MeshRenderingSystem(System):
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
         for entity in self.entities:
-            self.renderer.draw(entity[Transform], self.scene.lights)
+            self.renderer.draw(entity[Transform])
 
     def add(self, entity: Entity) -> None:
         """Add an entity to the scene."""
