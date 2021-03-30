@@ -1,6 +1,4 @@
 """Implements rendering meshes."""
-from typing import List
-
 import ctypes
 import numpy as np
 import OpenGL.GL as gl
@@ -9,7 +7,6 @@ import glm
 from flaris.transform import Transform
 
 from flaris.rendering.camera import Camera
-from flaris.rendering.light import Light
 from flaris.rendering.shader import Shader
 
 __all__ = ["MeshRenderer"]
