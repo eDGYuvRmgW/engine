@@ -158,7 +158,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(sel, transform: Transform, lights: List[Light]) -> None:
+    def draw(self, transform: Transform, lights: List[Light]) -> None:
         """Draw a mesh on the screen.
 
         Args:
