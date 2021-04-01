@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import tempfile
 import os
+import glm
 
 import OpenGL.GL as gl
 import OpenGL.GL.shaders as gls
@@ -45,6 +46,45 @@ class Shader:  # pylint: disable=too-few-public-methods
         self.fragment_path = fragment
         with open(self.fragment_path) as file:
             self.fragment_source = file.read()
+
+    def set_int(self, name: str, value: int) -> None:
+        """Set the value of an int uniform.
+
+        Args:
+            name: The name of the uniform.
+            value: The int to assign to the uniform.
+        """
+        gl.glUniform1i(gl.glGetUniformLocation(self.program, name), value)
+
+    def set_float(self, name: str, value: float) -> None:
+        """Set the value of a float uniform.
+
+        Args:
+            name: The name of the uniform.
+            value: The float to assign to the uniform.
+        """
+        gl.glUniform1f(gl.glGetUniformLocation(self.program, name), value)
+
+    def set_vec3(self, name: str, x: float, y: float, z: float) -> None:
+        """Set the value of a vec3 uniform.
+
+        Args:
+            name: The name of the uniform.
+            x: The x value of the vec3.
+            y: The y value of the vec3.
+            z: The z value of the vec3.
+        """
+        gl.glUniform3f(gl.glGetUniformLocation(self.program, name), x, y, z)
+
+    def set_mat4(self, name: str, value: glm.mat4) -> None:
+        """Set the value of a mat4 uniform.
+
+        Args:
+            name: The name of the uniform.
+            value: The mat4 to assign to the uniform.
+        """
+        gl.glUniformMatrix4fv(gl.glGetUniformLocation(self.program, name), 1,
+                              gl.GL_FALSE, glm.value_ptr(value))
 
     @property
     def program(self):

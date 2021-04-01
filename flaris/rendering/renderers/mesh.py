@@ -147,6 +147,6 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "projection"), 1,
             gl.GL_FALSE, glm.value_ptr(self.camera.projection))
-
+        
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)
