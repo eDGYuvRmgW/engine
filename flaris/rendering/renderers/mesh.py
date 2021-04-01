@@ -9,6 +9,8 @@ from flaris.transform import Transform
 from flaris.rendering.camera import Camera
 from flaris.rendering.shader import Shader
 
+from ..mesh import Mesh
+
 __all__ = ["MeshRenderer"]
 
 DEFAULT_VERTEX_SHADER = """
@@ -109,12 +111,12 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, transform: Transform) -> None:
+    def draw(self, mesh: Mesh, transform: Transform) -> None:  # pylint: disable=unused-argument  # noqa: E501
         """Draw a mesh on the screen.
 
         Args:
+            mesh: The mesh to draw.
             transform: The position, rotation, and scale of the mesh.
-            lights: A list of lights in the current scene.
         """
         gl.glUseProgram(self.shader.program)
         gl.glBindVertexArray(self.vao)
