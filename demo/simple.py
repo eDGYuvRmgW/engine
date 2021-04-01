@@ -1,6 +1,5 @@
 from flaris import Entity, Game, Transform, Vector
 from flaris.rendering import Mesh, OrthographicCamera
-from flaris.inputs import key
 
 
 class Cube(Entity):
@@ -25,7 +24,8 @@ class MainCamera(Entity):
 
 game = Game("Simple Demo")
 
-camera = MainCamera(Transform(position=Vector(0, 0, 0), rotation=Vector(-30, -45, 0)))
+camera = MainCamera(Transform(rotation=Vector(-30, -45, 0)))
+
 game.add(camera)
 
 cube = Cube(Transform())

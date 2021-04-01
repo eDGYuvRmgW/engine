@@ -78,6 +78,7 @@ class MeshRenderingSystem(System):
         self.renderer = None
 
     def start(self) -> None:
+        """Construct a mesh renderer."""
         self.renderer = MeshRenderer(self.camera)
 
     def step(self, delta: float) -> None:
