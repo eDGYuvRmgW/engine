@@ -1,6 +1,4 @@
 """Implements rendering meshes."""
-from typing import List
-
 import ctypes
 import numpy as np
 import OpenGL.GL as gl
@@ -9,8 +7,9 @@ import glm
 from flaris.transform import Transform
 
 from flaris.rendering.camera import Camera
-from flaris.rendering.light import Light
 from flaris.rendering.shader import Shader
+
+from ..mesh import Mesh
 
 __all__ = ["MeshRenderer"]
 
@@ -18,65 +17,24 @@ DEFAULT_VERTEX_SHADER = """
     #version 410 core
     layout (location = 0) in vec3 aPos;
     layout (location = 1) in vec3 aNormal;
-
-    out vec3 FragPos;
     out vec3 Normal;
-
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
-
     void main()
     {
         gl_Position = projection * view * model * vec4(aPos, 1.0);
-        FragPos = vec3(model * vec4(aPos, 1.0));
-
-        // TODO(@nspevacek): costly, calculate matrix on CPU instead
-        Normal = mat3(transpose(inverse(model))) * aNormal;
+        Normal = aNormal;
     }
 """
 
 DEFAULT_FRAGMENT_SHADER = """
     #version 410 core
-    struct Material {
-        vec3 ambient;
-        vec3 diffuse;
-        vec3 specular;
-        float shininess;
-    };
-
-    struct Light {
-        vec3 direction;
-        vec3 ambient;
-        vec3 diffuse;
-        vec3 specular;
-    };
-
     out vec4 FragColor;
-
     in vec3 Normal;
-    in vec3 FragPos;
-
-    uniform Material material;
-    uniform Light light;
-    uniform vec3 lightPos;
-    uniform vec3 viewPos;
-
-    void main() {
-        vec3 ambient = light.ambient * material.ambient;
-
-        vec3 norm = normalize(Normal);
-        vec3 lightDir = normalize(-light.direction);
-        float diff = max(dot(norm, lightDir), 0.0);
-        vec3 diffuse = light.diffuse * (diff * material.diffuse);
-
-        vec3 viewDir = normalize(viewPos - FragPos);
-        vec3 reflectDir = reflect(-lightDir, norm);
-        float spec = pow(max(dot(viewDir,reflectDir), 0.0), material.shininess);
-        vec3 specular = light.specular * (spec * material.specular);
-
-        vec3 result = ambient + diffuse + specular;
-        FragColor = vec4(result, 1.0);
+    void main()
+    {
+        FragColor = vec4(abs(Normal), 1.0);
     }
 """
 
@@ -96,42 +54,42 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         # TODO(@nspevacek): replace with vertices from loaded model once
         # implemented
         vertices = np.array([
-            -0.5, -0.5, -0.5, 0.0, 0.0,
-            0.5, -0.5, -0.5, 1.0, 0.0,
-            0.5, 0.5, -0.5, 1.0, 1.0,
-            0.5, 0.5, -0.5, 1.0, 1.0,
-            -0.5, 0.5, -0.5, 0.0, 1.0,
-            -0.5, -0.5, -0.5, 0.0, 0.0,
-            -0.5, -0.5, 0.5, 0.0, 0.0,
-            0.5, -0.5, 0.5, 1.0, 0.0,
-            0.5, 0.5, 0.5, 1.0, 1.0,
-            0.5, 0.5, 0.5, 1.0, 1.0,
-            -0.5, 0.5, 0.5, 0.0, 1.0,
-            -0.5, -0.5, 0.5, 0.0, 0.0,
-            -0.5, 0.5, 0.5, 1.0, 0.0,
-            -0.5, 0.5, -0.5, 1.0, 1.0,
-            -0.5, -0.5, -0.5, 0.0, 1.0,
-            -0.5, -0.5, -0.5, 0.0, 1.0,
-            -0.5, -0.5, 0.5, 0.0, 0.0,
-            -0.5, 0.5, 0.5, 1.0, 0.0,
-            0.5, 0.5, 0.5, 1.0, 0.0,
-            0.5, 0.5, -0.5, 1.0, 1.0,
-            0.5, -0.5, -0.5, 0.0, 1.0,
-            0.5, -0.5, -0.5, 0.0, 1.0,
-            0.5, -0.5, 0.5, 0.0, 0.0,
-            0.5, 0.5, 0.5, 1.0, 0.0,
-            -0.5, -0.5, -0.5, 0.0, 1.0,
-            0.5, -0.5, -0.5, 1.0, 1.0,
-            0.5, -0.5, 0.5, 1.0, 0.0,
-            0.5, -0.5, 0.5, 1.0, 0.0,
-            -0.5, -0.5, 0.5, 0.0, 0.0,
-            -0.5, -0.5, -0.5, 0.0, 1.0,
-            -0.5, 0.5, -0.5, 0.0, 1.0,
-            0.5, 0.5, -0.5, 1.0, 1.0,
-            0.5, 0.5, 0.5, 1.0, 0.0,
-            0.5, 0.5, 0.5, 1.0, 0.0,
-            -0.5, 0.5, 0.5, 0.0, 0.0,
-            -0.5, 0.5, -0.5, 0.0, 1.0
+            -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
+            0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
+            0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
+            0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
+            -0.5, 0.5, -0.5, 0.0, 0.0, -1.0,
+            -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,
+            -0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
+            0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
+            0.5, 0.5, 0.5, 0.0, 0.0, 1.0,
+            0.5, 0.5, 0.5, 0.0, 0.0, 1.0,
+            -0.5, 0.5, 0.5, 0.0, 0.0, 1.0,
+            -0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
+            -0.5, 0.5, 0.5, -1.0, 0.0, 0.0,
+            -0.5, 0.5, -0.5, -1.0, 0.0, 0.0,
+            -0.5, -0.5, -0.5, -1.0, 0.0, 0.0,
+            -0.5, -0.5, -0.5, -1.0, 0.0, 0.0,
+            -0.5, -0.5, 0.5, -1.0, 0.0, 0.0,
+            -0.5, 0.5, 0.5, -1.0, 0.0, 0.0,
+            0.5, 0.5, 0.5, 1.0, 0.0, 0.0,
+            0.5, 0.5, -0.5, 1.0, 0.0, 0.0,
+            0.5, -0.5, -0.5, 1.0, 0.0, 0.0,
+            0.5, -0.5, -0.5, 1.0, 0.0, 0.0,
+            0.5, -0.5, 0.5, 1.0, 0.0, 0.0,
+            0.5, 0.5, 0.5, 1.0, 0.0, 0.0,
+            -0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
+            0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
+            0.5, -0.5, 0.5, 0.0, -1.0, 0.0,
+            0.5, -0.5, 0.5, 0.0, -1.0, 0.0,
+            -0.5, -0.5, 0.5, 0.0, -1.0, 0.0,
+            -0.5, -0.5, -0.5, 0.0, -1.0, 0.0,
+            -0.5, 0.5, -0.5, 0.0, 1.0, 0.0,
+            0.5, 0.5, -0.5, 0.0, 1.0, 0.0,
+            0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
+            0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
+            -0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
+            -0.5, 0.5, -0.5, 0.0, 1.0, 0.0
         ], dtype=np.float32)
 
         self.shader = shader
@@ -145,20 +103,20 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         gl.glBufferData(gl.GL_ARRAY_BUFFER, vertices.nbytes, vertices,
                         gl.GL_STATIC_DRAW)
 
-        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 20,
+        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 24,
                                  ctypes.c_void_p(0))
         gl.glEnableVertexAttribArray(0)
 
-        gl.glVertexAttribPointer(1, 2, gl.GL_FLOAT, gl.GL_FALSE, 20,
+        gl.glVertexAttribPointer(1, 3, gl.GL_FLOAT, gl.GL_FALSE, 24,
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, transform: Transform, lights: List[Light]) -> None:
+    def draw(self, mesh: Mesh, transform: Transform) -> None:  # pylint: disable=unused-argument  # noqa: E501
         """Draw a mesh on the screen.
 
         Args:
+            mesh: The mesh to draw.
             transform: The position, rotation, and scale of the mesh.
-            lights: A list of lights in the current scene.
         """
         gl.glUseProgram(self.shader.program)
         gl.glBindVertexArray(self.vao)
@@ -180,32 +138,15 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             model,
             glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
 
-        self.shader.set_mat4("model", model)
-        self.shader.set_mat4("view", self.camera.view)
-        self.shader.set_mat4("projection", self.camera.projection)
-
-        self.shader.set_vec3("viewPos", self.camera.transform.position.x,
-                             self.camera.transform.position.y,
-                             self.camera.transform.position.z)
-
-        # Temporary
-        light = lights[0]
-
-        self.shader.set_vec3("material.ambient", 1.0, 0.5, 0.31)
-        self.shader.set_vec3("material.diffuse", 1.0, 0.5, 0.31)
-        self.shader.set_vec3("material.specular", 0.5, 0.5, 0.5)
-        self.shader.set_float("material.shininess", 32.0)
-
-        self.shader.set_vec3("lightPos", light.position.x, light.position.y,
-                             light.position.z)
-        self.shader.set_vec3("light.direction", -light.position.x,
-                             -light.position.y, -light.position.z)
-        self.shader.set_vec3("light.ambient", light.ambient.x, light.ambient.y,
-                             light.ambient.z)
-        self.shader.set_vec3("light.diffuse", light.diffuse.x, light.diffuse.y,
-                             light.diffuse.z)
-        self.shader.set_vec3("light.specular", light.specular.x,
-                             light.specular.y, light.specular.z)
-
+        gl.glUniformMatrix4fv(
+            gl.glGetUniformLocation(self.shader.program, "model"), 1,
+            gl.GL_FALSE, glm.value_ptr(model))
+        gl.glUniformMatrix4fv(
+            gl.glGetUniformLocation(self.shader.program, "view"), 1,
+            gl.GL_FALSE, glm.value_ptr(self.camera.view))
+        gl.glUniformMatrix4fv(
+            gl.glGetUniformLocation(self.shader.program, "projection"), 1,
+            gl.GL_FALSE, glm.value_ptr(self.camera.projection))
+        
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)

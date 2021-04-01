@@ -7,9 +7,8 @@ from flaris.entity import Entity
 from flaris.system import System, SequentialSystem
 from flaris.transform import Transform
 
-from .camera import Camera
-from .light import Light
-from .scene import Scene
+from .camera import OrthographicCamera
+from .mesh import Mesh
 from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
@@ -22,7 +21,7 @@ class RenderingSystem(SequentialSystem):
         """Construct and pipeline the systems needed to render a scene."""
         super().__init__([
             WindowClearSystem(),
-            MeshRenderingSystem(Scene()),
+            MeshRenderingSystem(),
             TextRenderingSystem(),
             SpriteRenderingSystem(),
             BufferSwapSystem()
@@ -70,44 +69,30 @@ class SpriteRenderingSystem(System):
 class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
-    def __init__(self, scene: Scene):
+    REQUIRED_COMPONENTS = Transform, Mesh
+
+    def __init__(self):
         """Initialize the scene."""
         super().__init__()
-        self.scene = scene
+        self.camera = None
+        self.renderer = None
 
     def start(self) -> None:
         """Construct a mesh renderer."""
-        if self.scene.camera is None:
-            raise RuntimeError(
-                "A Camera must be added to initialize the MeshRenderer.")
-
-        self.renderer = MeshRenderer(self.scene.camera)
+        self.renderer = MeshRenderer(self.camera)
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
         for entity in self.entities:
-            self.renderer.draw(entity[Transform], self.scene.lights)
+            self.renderer.draw(entity[Mesh], entity[Transform])
 
     def add(self, entity: Entity) -> None:
         """Add an entity to the scene."""
-        if isinstance(entity, Camera) and not self.scene.camera:
-            self.scene.camera = entity
-            return
-
-        if isinstance(entity, Camera) and self.scene.camera:
-            raise ValueError("MeshRenderer already has a Camera attached.")
-
-        if entity[Light]:
-            self.scene.add(entity[Light])
+        # TODO: Add inheritance for component keys
+        if OrthographicCamera in entity and not self.camera:
+            self.camera = entity[OrthographicCamera]
 
         super().add(entity)
-
-    def remove(self, entity: Entity) -> None:
-        """Remove an entity from the scene."""
-        if entity is self.scene.camera:
-            raise ValueError("Cannot remove the Camera from the scene.")
-
-        super().remove(entity)
 
 
 class BufferSwapSystem(System):
