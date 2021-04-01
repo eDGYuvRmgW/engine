@@ -13,4 +13,3 @@ class Mesh(Component):  # pylint: disable=too-few-public-methods
         Arguments:
             path: Path to a COLLADA model.
         """
-        raise NotImplementedError

@@ -1,40 +1,65 @@
 """Implements the `Camera` class."""
+from dataclasses import dataclass
+import math
+
 import glfw
 import glm
 
-from flaris import Entity
+from flaris.component import Component, ComponentError
 from flaris.transform import Transform
 
-__all__ = ["Camera"]
+__all__ = ["Camera", "OrthographicCamera"]
 
 
-class Camera(Entity):  # pylint: disable=too-few-public-methods
-    """An object representing the game's camera."""
-
-    def __init__(self, transform: Transform):
-        """Initialize `Camera` attributes.
-
-        Components:
-            transform: The transform of the `Camera` object.
-        """
-        super().__init__()
-        self.transform = transform
+class Camera(Component):
+    """Base class for cameras."""
 
     @property
     def view(self) -> glm.mat4:
-        """Return the `Camera` view matrix."""
-        position = glm.vec3(self.transform.position.x,
-                            self.transform.position.y,
-                            self.transform.position.z)
+        """Return the camera view matrix."""
+        if not self.entity or Transform not in self.entity:
+            raise ComponentError(
+                "Expected camera to be attached to an entity with a transform "
+                "component."
+            )
+
+        position = glm.vec3(self.entity.transform.position.x,
+                            self.entity.transform.position.y,
+                            self.entity.transform.position.z)
         front = glm.vec3(0.0, 0.0, -1.0)
         upwards = glm.vec3(0.0, 1.0, 0.0)
-        return glm.lookAt(position, position + front, upwards)
+        angles = self.entity[Transform].rotation * math.pi / 180
+        rotation = glm.quat(glm.vec3(angles.x, angles.y, angles.z))
+        return glm.lookAt(position, position + rotation * front,
+                          rotation * upwards)
 
     @property
-    def projection(self):
-        """Return the `Camera` projection matrix."""
+    def projection(self) -> glm.mat4:
+        """Return a projection matrix."""
+        raise NotImplementedError
+
+
+@dataclass
+class OrthographicCamera(Camera):
+    """An orthographic camera.
+
+    Attributes:
+        size: A float specifying the height of the screen in Flaris units.
+        near: A float specifying the near clipping plane.
+        far: A float specifying the far clipping plane.
+    """
+
+    size: float = 10
+    near: float = 0.001
+    far: float = 10000
+
+    @property
+    def projection(self) -> glm.mat4:
+        """Return an orthographic projection matrix."""
         window = glfw.get_current_context()
-        window_width, window_height = glfw.get_window_size(window)
-        return glm.ortho(-0.5 * window_width, 0.5 * window_width,
-                         -0.5 * window_height, 0.5 * window_height, -100.0,
-                         100.0)
+        width, height = glfw.get_window_size(window)
+        aspect_ratio = width / height
+        left, right = (-aspect_ratio * self.size / 2,
+                       aspect_ratio * self.size / 2)
+        bottom, top = -self.size / 2, self.size / 2
+        return glm.ortho(left, right, bottom, top, self.near, self.far)

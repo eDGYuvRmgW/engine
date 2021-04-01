@@ -1,32 +1,34 @@
-from typing import TYPE_CHECKING
-
-from flaris import Direction, Entity, Game, Transform
-from flaris.rendering import Sprite, Text
+from flaris import Entity, Game, Transform, Vector
+from flaris.rendering import Mesh, OrthographicCamera
 from flaris.inputs import key
 
-if TYPE_CHECKING:
-    from flaris import Transform
 
+class Cube(Entity):
 
-class Box(Entity):
-
-    def __init__(self, transform: Transform, speed: float = 100):
+    def __init__(self, transform):
         super().__init__()
-        self.text = Text("Hello, world!")
-
         self.transform = transform
-        self.speed = speed
+        # NOTE: This doesn't do anything right now.
+        self.mesh = Mesh("demo/cube.dae")
 
     def update(self, delta: float) -> None:
-        if key.is_down(key.LEFT):
-            self.transform.position += self.speed * Direction.LEFT * delta
-        if key.is_down(key.RIGHT):
-            self.transform.position += self.speed * Direction.RIGHT * delta
+        self.transform.rotation -= Vector(0, 45, 0) * delta
 
 
-game = Game("Simple Game")
+class MainCamera(Entity):
 
-box = Box(Transform())
-game.add(box)
+    def __init__(self, transform):
+        super().__init__()
+        self.transform = transform
+        self.camera = OrthographicCamera(near=-1)
+
+
+game = Game("Simple Demo")
+
+camera = MainCamera(Transform(position=Vector(0, 0, 0), rotation=Vector(-30, -45, 0)))
+game.add(camera)
+
+cube = Cube(Transform())
+game.add(cube)
 
 game.run(width=800, height=600)
