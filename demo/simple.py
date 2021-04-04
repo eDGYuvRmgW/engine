@@ -42,7 +42,6 @@ class Sun(Entity):
             self.transform.rotation += Vector(90, 0, 0) * delta
         if key.is_down(key.UP):
             self.transform.rotation -= Vector(90, 0, 0) * delta
-        print(self.transform.rotation, end="\r")
         
 
 game = Game("Simple Demo")
@@ -54,7 +53,7 @@ game.add(camera)
 cube = Cube(Transform())
 game.add(cube)
 
-sun = Sun(Transform(), Color(1, 1, 1))
+sun = Sun(Transform(rotation=Vector(0, 90, 0)), Color(1, 1, 1))
 game.add(sun)
 
 moon = Sun(Transform(rotation=Vector(0, 180, 0)), Color(0, 0, 1))

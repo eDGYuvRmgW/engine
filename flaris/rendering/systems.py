@@ -82,28 +82,23 @@ class MeshRenderingSystem(System):
     def start(self) -> None:
         """Construct a mesh renderer."""
         self.renderer = MeshRenderer(self.camera)
-        gl.glEnable(gl.GL_BLEND)
-        gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE)
-        gl.glDepthFunc(gl.GL_LEQUAL)
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
         if not self.lights:
             return
-
+        
         for entity in self.entities:
             # First pass
+            gl.glDepthFunc(gl.GL_LESS)
             gl.glDisable(gl.GL_BLEND)
-            gl.glEnable(gl.GL_DEPTH_TEST)
-            gl.glDepthMask(gl.GL_TRUE)
             self.renderer.draw(entity[Mesh], entity[Transform], self.lights[0])
 
+        for entity in self.entities:
             # Second+ pass
-            gl.glDepthMask(gl.GL_FALSE)
-            gl.glDisable(gl.GL_DEPTH_TEST)
+            gl.glDepthFunc(gl.GL_EQUAL)
             gl.glEnable(gl.GL_BLEND)
             gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE)
-            
             for light in self.lights[1:]:
                 self.renderer.draw(entity[Mesh], entity[Transform], light)
 
