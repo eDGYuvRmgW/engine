@@ -2,10 +2,12 @@
 import OpenGL.GL as gl
 from PIL import Image
 
+from flaris.component import Component
+
 _TEXTURES = {}
 
 
-class Texture:  # pylint: disable=too-few-public-methods
+class Texture(Component):  # pylint: disable=too-few-public-methods
     """A texture to be mapped onto a mesh.
 
     The texture is generated lazily.
