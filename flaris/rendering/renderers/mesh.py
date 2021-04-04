@@ -9,6 +9,8 @@ from flaris.transform import Transform
 from flaris.rendering.camera import Camera
 from flaris.rendering.shader import Shader
 
+from ..light import Light, DirectionalLight, AmbientLight
+from ..material import Material
 from ..mesh import Mesh
 
 __all__ = ["MeshRenderer"]
@@ -17,25 +19,59 @@ DEFAULT_VERTEX_SHADER = """
     #version 410 core
     layout (location = 0) in vec3 aPos;
     layout (location = 1) in vec3 aNormal;
+
+    out vec3 FragPos;
     out vec3 Normal;
+
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
+
     void main()
     {
-        gl_Position = projection * view * model * vec4(aPos, 1.0);
-        Normal = aNormal;
+        FragPos = vec3(model * vec4(aPos, 1.0));
+        Normal = mat3(transpose(inverse(model))) * aNormal;  
+        
+        gl_Position = projection * view * vec4(FragPos, 1.0);
     }
 """
 
 DEFAULT_FRAGMENT_SHADER = """
-    #version 410 core
+    #version 330 core
     out vec4 FragColor;
-    in vec3 Normal;
+
+    struct Material {
+        vec3 ambient;
+        vec3 diffuse;
+    }; 
+
+    struct Light {
+        vec3 direction;
+        vec3 ambient;
+        vec3 diffuse;
+    };
+
+    in vec3 FragPos;  
+    in vec3 Normal;  
+    
+    uniform vec3 viewPos;
+    uniform Material material;
+    uniform Light light;
+
     void main()
     {
-        FragColor = vec4(abs(Normal), 1.0);
-    }
+        // ambient
+        vec3 ambient = light.ambient * material.ambient;
+        
+        // diffuse 
+        vec3 norm = normalize(Normal);
+        vec3 lightDir = light.direction;
+        float diff = max(dot(norm, -lightDir), 0.0);
+        vec3 diffuse = light.diffuse * (diff * material.diffuse);
+            
+        vec3 result = ambient + diffuse;
+        FragColor = vec4(result, 1.0);
+    } 
 """
 
 DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
@@ -111,7 +147,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
                                  ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
 
-    def draw(self, mesh: Mesh, transform: Transform) -> None:  # pylint: disable=unused-argument  # noqa: E501
+    def draw(self, mesh: Mesh, transform: Transform, light: Light) -> None:  # pylint: disable=unused-argument  # noqa: E501
         """Draw a mesh on the screen.
 
         Args:
@@ -148,5 +184,17 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             gl.glGetUniformLocation(self.shader.program, "projection"), 1,
             gl.GL_FALSE, glm.value_ptr(self.camera.projection))
         
+        angles = light.entity[Transform].rotation * 3.14159 / 180
+        rotation = glm.quat(glm.vec3(angles.x, angles.y, angles.z))
+        forwards = glm.vec3(0, 0, 1)
+        self.shader.set_vec3("light.direction", rotation * forwards)
+        self.shader.set_vec3("viewPos", self.camera.entity[Transform].position)
+
+        self.shader.set_vec3("light.diffuse", light.diffuse)
+        self.shader.set_vec3("light.ambient", light.ambient)
+
+        self.shader.set_vec3("material.ambient", mesh.entity[Material].ambient)
+        self.shader.set_vec3("material.diffuse", mesh.entity[Material].diffuse)
+
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
         gl.glBindVertexArray(0)

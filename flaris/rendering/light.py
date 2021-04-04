@@ -1,24 +1,33 @@
 """Implements the `Light` class."""
 from dataclasses import dataclass
 
-from flaris.entity import Component
-from flaris.transform import Vector
+import glm
 
-__all__ = ["Light"]
+from flaris.entity import Component
+
+from .color import Color
+
+__all__ = ["Light", "DirectionalLight", "AmbientLight"]
+
+
+class Light(Component):
+    pass
+
+@dataclass
+class DirectionalLight(Light):  # pylint: disable=too-few-public-methods
+    color: Color = Color(1, 1, 1)
+    intensity: float = 1
+
+    def __post_init__(self):
+        self.ambient = glm.vec3(0, 0, 0)
+        self.diffuse = glm.vec3(self.color.red, self.color.green, self.color.blue) * self.intensity
 
 
 @dataclass
-class Light(Component):  # pylint: disable=too-few-public-methods
-    """A simple light source.
+class AmbientLight(Light):  # pylint: disable=too-few-public-methods
+    color: Color = Color(1, 1, 1)
+    intensity: float = 0.25
 
-    Attributes:
-        position: The position of the `Light`.
-        ambient: The ambient value of the `Light`.
-        diffuse: The diffuse value of the `Light`.
-        specular: The specular value of the `Light`.
-    """
-
-    position: Vector
-    ambient: Vector = Vector(0.2, 0.2, 0.2)
-    diffuse: Vector = Vector(0.5, 0.5, 0.5)
-    specular: Vector = Vector(1.0, 1.0, 1.0)
+    def __post_init__(self):
+        self.ambient = glm.vec3(self.color.red, self.color.green, self.color.blue) * self.intensity
+        self.diffuse = glm.vec3(0, 0, 0)

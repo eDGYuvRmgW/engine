@@ -8,6 +8,7 @@ from flaris.system import System, SequentialSystem
 from flaris.transform import Transform
 
 from .camera import OrthographicCamera
+from .light import DirectionalLight, AmbientLight
 from .mesh import Mesh
 from .sprite import Sprite
 from .text import Text
@@ -76,21 +77,47 @@ class MeshRenderingSystem(System):
         super().__init__()
         self.camera = None
         self.renderer = None
+        self.lights = []
 
     def start(self) -> None:
         """Construct a mesh renderer."""
         self.renderer = MeshRenderer(self.camera)
+        gl.glEnable(gl.GL_BLEND)
+        gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE)
+        gl.glDepthFunc(gl.GL_LEQUAL)
 
     def step(self, delta: float) -> None:
         """Render each mesh in the scene."""
+        if not self.lights:
+            return
+
         for entity in self.entities:
-            self.renderer.draw(entity[Mesh], entity[Transform])
+            # First pass
+            gl.glDisable(gl.GL_BLEND)
+            gl.glEnable(gl.GL_DEPTH_TEST)
+            gl.glDepthMask(gl.GL_TRUE)
+            self.renderer.draw(entity[Mesh], entity[Transform], self.lights[0])
+
+            # Second+ pass
+            gl.glDepthMask(gl.GL_FALSE)
+            gl.glDisable(gl.GL_DEPTH_TEST)
+            gl.glEnable(gl.GL_BLEND)
+            gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE)
+            
+            for light in self.lights[1:]:
+                self.renderer.draw(entity[Mesh], entity[Transform], light)
 
     def add(self, entity: Entity) -> None:
         """Add an entity to the scene."""
         # TODO: Add inheritance for component keys
         if OrthographicCamera in entity and not self.camera:
             self.camera = entity[OrthographicCamera]
+
+        if DirectionalLight in entity:
+            self.lights.append(entity[DirectionalLight])
+
+        if AmbientLight in entity:
+            self.lights.append(entity[AmbientLight])
 
         super().add(entity)
 
