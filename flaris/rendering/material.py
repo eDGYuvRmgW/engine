@@ -8,13 +8,21 @@ from .texture import Texture
 
 @dataclass
 class Material(Component):
+    """An abstraction that specifies how a model should be shaded.
+    
+    Attributes:
+        albedo: A Color representing the base color of a model.
+        shininess: A float that determines the amount of specular effects.
+    """
     albedo: Color = Color(1, 1, 1)
     shininess: float = 32.0
 
     @property
     def ambient(self):
+        """Return a texture specifying the ambient coefficients."""
         return self.entity[Texture].name
 
     @property
     def diffuse(self):
+        """Return a texture specifying the diffuse coefficients."""
         return self.entity[Texture].name

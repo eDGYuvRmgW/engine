@@ -103,6 +103,9 @@ class Shader:  # pylint: disable=too-few-public-methods
         Returns:
             A Shader instance.
         """
+        # NOTE(@bveeramani): I don't remeber why, but there was some reason why
+        # I didn't want to use with statements here.
+        # pylint: disable=consider-using-with
         vertex_shader = tempfile.NamedTemporaryFile(mode="w", delete=False)
         fragment_shader = tempfile.NamedTemporaryFile(mode="w", delete=False)
 
