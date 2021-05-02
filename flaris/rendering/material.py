@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-import glm
-
 from flaris.component import Component
 
 from .color import Color
