@@ -151,6 +151,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         Args:
             mesh: The mesh to draw.
             transform: The position, rotation, and scale of the mesh.
+            light: The light to draw.
         """
         gl.glUseProgram(self.shader.program)
         gl.glBindVertexArray(self.vao)

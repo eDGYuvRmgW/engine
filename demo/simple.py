@@ -1,6 +1,8 @@
+"""A simple demo."""
 from flaris import Entity, Game, Transform, Vector
 from flaris.rendering import Mesh, OrthographicCamera, DirectionalLight, Material, AmbientLight, Color, Texture
 from flaris.inputs import key
+
 
 class Stone(Entity):
 
@@ -11,11 +13,6 @@ class Stone(Entity):
         self.mesh = Mesh("demo/cube.dae")
         self.texture = Texture("demo/checkers.png")
         self.material = Material(albedo=Color(0.2, 0.2, 0.2))
-
-
-    def update(self, delta: float) -> None:
-        return
-        self.transform.rotation -= Vector(0, 45, 0) * delta
 
 
 class Crate(Entity):
@@ -60,7 +57,7 @@ class Sun(Entity):
             self.transform.rotation += Vector(90, 0, 0) * delta
         if key.is_down(key.UP):
             self.transform.rotation -= Vector(90, 0, 0) * delta
-        
+
 
 game = Game("Simple Demo")
 

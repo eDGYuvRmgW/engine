@@ -1,4 +1,4 @@
-"""This module implements the `Material` class."""
+"""Implements the `Material` class."""
 from dataclasses import dataclass
 
 from flaris.component import Component
@@ -7,6 +7,7 @@ from .color import Color
 from .texture import Texture
 
 __all__ = ["Material"]
+
 
 @dataclass
 class Material(Component):
