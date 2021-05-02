@@ -12,7 +12,7 @@ from .texture import Texture
 class Material(Component):
     albedo: Color = Color(1, 1, 1)
     shininess: float = 32.0
-    
+
     @property
     def ambient(self):
         return self.entity[Texture].name
@@ -20,4 +20,3 @@ class Material(Component):
     @property
     def diffuse(self):
         return self.entity[Texture].name
-        

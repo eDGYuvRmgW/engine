@@ -86,14 +86,13 @@ DEFAULT_MESH_SHADER = Shader.compile(vertex=DEFAULT_VERTEX_SHADER,
 class MeshRenderer:  # pylint: disable=too-few-public-methods
     """A renderer for drawing meshes on the screen."""
 
-    def __init__(self,
-                 camera: Camera,
-                 shader: Shader = DEFAULT_MESH_SHADER):
+    def __init__(self, camera: Camera, shader: Shader = DEFAULT_MESH_SHADER):
         """Initialize OpenGL buffer data."""
         self.camera = camera
 
         # TODO(@nspevacek): replace with vertices from loaded model once
         # implemented
+        # yapf: disable
         vertices = np.array([
         -0.5, -0.5, -0.5,  0.0,  0.0, -1.0,  0.0,  0.0,
          0.5, -0.5, -0.5,  0.0,  0.0, -1.0,  1.0,  0.0,
@@ -137,6 +136,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         -0.5,  0.5,  0.5,  0.0,  1.0,  0.0,  0.0,  0.0,
         -0.5,  0.5, -0.5,  0.0,  1.0,  0.0,  0.0,  1.0
         ], dtype=np.float32)
+        # yapf: enable
 
         self.shader = shader
 
@@ -206,14 +206,15 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "projection"), 1,
             gl.GL_FALSE, glm.value_ptr(self.camera.projection))
-        
+
         angles = light.entity[Transform].rotation * 3.14159 / 180
         rotation = glm.quat(glm.vec3(angles.x, angles.y, angles.z))
         forwards = glm.vec3(0, 0, 1)
         self.shader.set_vec3("light.direction", rotation * forwards)
         self.shader.set_vec3("viewPos", self.camera.entity[Transform].position)
         albedo = mesh.entity[Material].albedo
-        self.shader.set_vec3("material.albedo", glm.vec3(albedo.red, albedo.green, albedo.blue))
+        self.shader.set_vec3("material.albedo",
+                             glm.vec3(albedo.red, albedo.green, albedo.blue))
         self.shader.set_vec3("light.diffuse", light.diffuse)
         self.shader.set_vec3("light.ambient", light.ambient)
 

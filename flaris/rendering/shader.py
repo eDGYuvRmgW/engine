@@ -67,7 +67,8 @@ class Shader:  # pylint: disable=too-few-public-methods
 
     def set_vec3(self, name: str, vector: glm.vec3) -> None:
         """Set the value of a vec3 uniform."""
-        gl.glUniform3f(gl.glGetUniformLocation(self.program, name), vector.x, vector.y, vector.z)
+        gl.glUniform3f(gl.glGetUniformLocation(self.program, name), vector.x,
+                       vector.y, vector.z)
 
     def set_mat4(self, name: str, value: glm.mat4) -> None:
         """Set the value of a mat4 uniform.

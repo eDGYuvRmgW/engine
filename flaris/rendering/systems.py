@@ -87,7 +87,7 @@ class MeshRenderingSystem(System):
         """Render each mesh in the scene."""
         if not self.lights:
             return
-        
+
         for entity in self.entities:
             # First pass
             gl.glDepthFunc(gl.GL_LESS)

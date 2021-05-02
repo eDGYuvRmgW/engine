@@ -51,10 +51,16 @@ class SpriteRenderer:  # pylint: disable=too-few-public-methods
 
     def __init__(self, shader: Shader = DEFAULT_SPRITE_SHADER):
         """Initialize OpenGL buffer data."""
+        # yapf: disable
         vertices = np.array([
-            0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0
+            0.0, 1.0, 0.0, 1.0,
+            1.0, 0.0, 1.0, 0.0,
+            0.0, 0.0, 0.0, 0.0,
+            0.0, 1.0, 0.0, 1.0,
+            1.0, 1.0, 1.0, 1.0,
+            1.0, 0.0, 1.0, 0.0
         ], dtype=np.float32)
+        # yapf: enable
 
         self.shader = shader
 

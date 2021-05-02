@@ -20,8 +20,7 @@ class Camera(Component):
         if not self.entity or Transform not in self.entity:
             raise ComponentError(
                 "Expected camera to be attached to an entity with a transform "
-                "component."
-            )
+                "component.")
 
         position = glm.vec3(self.entity.transform.position.x,
                             self.entity.transform.position.y,
