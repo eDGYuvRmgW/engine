@@ -27,7 +27,7 @@ class Light(Component):
 @dataclass
 class DirectionalLight(Light):  # pylint: disable=too-few-public-methods
     """A directional light.
-    
+
     Attributes:
         color: A Color representing the color of the light.
         intensity: A float representing the intensity of the light.
@@ -51,7 +51,7 @@ class DirectionalLight(Light):  # pylint: disable=too-few-public-methods
 @dataclass
 class AmbientLight(Light):  # pylint: disable=too-few-public-methods
     """An ambient light.
-    
+
     Attributes:
         color: A Color representing the color of the light.
         intensity: A float representing the intensity of the light.

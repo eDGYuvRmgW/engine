@@ -1,3 +1,4 @@
+"""This module implements the `Material` class."""
 from dataclasses import dataclass
 
 from flaris.component import Component
@@ -5,11 +6,12 @@ from flaris.component import Component
 from .color import Color
 from .texture import Texture
 
+__all__ = ["Material"]
 
 @dataclass
 class Material(Component):
     """An abstraction that specifies how a model should be shaded.
-    
+
     Attributes:
         albedo: A Color representing the base color of a model.
         shininess: A float that determines the amount of specular effects.
