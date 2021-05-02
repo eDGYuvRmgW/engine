@@ -11,7 +11,14 @@ __all__ = ["Light", "DirectionalLight", "AmbientLight"]
 
 
 class Light(Component):
-    pass
+
+    @property
+    def ambient(self) -> glm.vec3:
+        raise NotImplementedError
+
+    @property
+    def diffuse(self) -> glm.vec3:
+        raise NotImplementedError
 
 
 @dataclass
@@ -19,10 +26,14 @@ class DirectionalLight(Light):  # pylint: disable=too-few-public-methods
     color: Color = Color(1, 1, 1)
     intensity: float = 1
 
-    def __post_init__(self):
-        self.ambient = glm.vec3(0, 0, 0)
-        self.diffuse = glm.vec3(self.color.red, self.color.green,
-                                self.color.blue) * self.intensity
+    @property
+    def ambient(self) -> glm.vec3:
+        return glm.vec3(0, 0, 0)
+
+    @property
+    def diffuse(self) -> glm.vec3:
+        return glm.vec3(self.color.red, self.color.green,
+                        self.color.blue) * self.intensity
 
 
 @dataclass
@@ -30,7 +41,11 @@ class AmbientLight(Light):  # pylint: disable=too-few-public-methods
     color: Color = Color(1, 1, 1)
     intensity: float = 0.25
 
-    def __post_init__(self):
-        self.ambient = glm.vec3(self.color.red, self.color.green,
-                                self.color.blue) * self.intensity
-        self.diffuse = glm.vec3(0, 0, 0)
+    @property
+    def ambient(self) -> glm.vec3:
+        return glm.vec3(self.color.red, self.color.green,
+                        self.color.blue) * self.intensity
+
+    @property
+    def diffuse(self) -> glm.vec3:
+        return glm.vec3(0, 0, 0)
