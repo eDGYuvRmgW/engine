@@ -9,12 +9,9 @@ class Cow(Entity):
     def __init__(self, transform):
         super().__init__()
         self.transform = transform
-        self.model = Model("demo/cow.dae")
-        self.texture = Texture("demo/checkers.png")
-        self.material = Material(albedo=Color(0.2, 0.2, 0.2))
-
-    def update(self, delta: float):
-        self.transform.position += Vector(0, 1, 0) * delta
+        self.model = Model("demo/dragon2.dae")
+        self.texture = Texture("demo/container.png")
+        self.material = Material()
 
 
 class MainCamera(Entity):
@@ -22,7 +19,7 @@ class MainCamera(Entity):
     def __init__(self, transform):
         super().__init__()
         self.transform = transform
-        self.camera = OrthographicCamera(near=-100)
+        self.camera = OrthographicCamera(near=-5)
 
 
 class Sun(Entity):
@@ -39,7 +36,7 @@ game = Game("Simple Demo")
 camera = MainCamera(Transform(rotation=Vector(-30, -45, 0)))
 game.add(camera)
 
-cow = Cow(Transform(scale=Vector(5, 5, 5)))
+cow = Cow(Transform(rotation=Vector(-90, 0, 0), scale=Vector(0.1, 0.1, 0.1)))
 game.add(cow)
 
 sun = Sun(Transform(rotation=Vector(0, 90, -45)), Color(1, 1, 1))

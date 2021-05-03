@@ -12,6 +12,7 @@ from flaris.rendering.shader import Shader
 from ..light import Light
 from ..material import Material
 from ..mesh import Mesh
+from ..texture import Texture
 
 __all__ = ["MeshRenderer"]
 
@@ -46,6 +47,7 @@ DEFAULT_FRAGMENT_SHADER = """
     struct Material {
         vec3 ambient;
         vec3 diffuse;
+        sampler2D albedo;
     };
 
     struct Light {
@@ -65,13 +67,13 @@ DEFAULT_FRAGMENT_SHADER = """
     void main()
     {
         // ambient
-        vec3 ambient = material.ambient * light.ambient;
+        vec3 ambient = material.ambient * light.ambient * texture(material.albedo, TexCoords).rgb;
 
         // diffuse
         vec3 norm = normalize(Normal);
         vec3 lightDir = light.direction;
         float diff = max(dot(norm, -lightDir), 0.0);
-        vec3 diffuse = material.diffuse * light.diffuse * diff;
+        vec3 diffuse = material.diffuse * light.diffuse * diff * texture(material.albedo, TexCoords).rgb;;
 
         vec3 result = ambient + diffuse;
         FragColor = vec4(result, 1.0);
@@ -105,6 +107,10 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
 
         self.shader.set_vec3("material.ambient", glm.vec3(material.ambient.red, material.ambient.green, material.ambient.blue))
         self.shader.set_vec3("material.diffuse", glm.vec3(material.diffuse.red, material.diffuse.green, material.diffuse.blue))
+
+        gl.glActiveTexture(gl.GL_TEXTURE0)
+        gl.glBindTexture(gl.GL_TEXTURE_2D, transform.entity[Texture].name)
+        self.shader.set_int("material.albedo", 0)
 
         model = glm.mat4(1.0)
         model = glm.translate(

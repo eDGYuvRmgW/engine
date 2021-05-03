@@ -24,10 +24,21 @@ class Mesh:
         vertex_indices = np.array(primitive.vertex_index).flatten()
         vertices = primitive.vertex[vertex_indices]
 
-        normal_indices = np.array(primitive.normal_index).flatten()
-        normals = primitive.normal[normal_indices]
+        if primitive.normal is not None:
+            normal_indices = np.array(primitive.normal_index).flatten()
+            normals = primitive.normal[normal_indices]
+        else:
+            normals = np.zeros(vertices.shape)
 
-        self.array = np.concatenate([vertices, normals], axis=1)
+        if len(primitive.texcoordset) == 0:
+            texture_coordinates = np.zeros((len(vertices), 2), dtype=np.float32)
+        else:
+            if primitive.texcoord_indexset:
+                texture_coordinates = primitive.texcoordset[0][primitive.texcoord_indexset[0]]
+            else:
+                texture_coordinates = primitive.texcoordset[0]
+                    
+        self.array = np.concatenate([vertices, normals, texture_coordinates], axis=1)
 
     @property
     def vao(self) -> None:
@@ -43,13 +54,17 @@ class Mesh:
         gl.glBufferData(gl.GL_ARRAY_BUFFER, self.array.nbytes, self.array,
                                     gl.GL_STATIC_DRAW)
 
-        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 24,
+        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 32,
                                     ctypes.c_void_p(0))
         gl.glEnableVertexAttribArray(0)
 
-        gl.glVertexAttribPointer(1, 3, gl.GL_FLOAT, gl.GL_FALSE, 24,
+        gl.glVertexAttribPointer(1, 3, gl.GL_FLOAT, gl.GL_FALSE, 32,
                                 ctypes.c_void_p(12))
         gl.glEnableVertexAttribArray(1)
+
+        gl.glVertexAttribPointer(2, 3, gl.GL_FLOAT, gl.GL_FALSE, 32,
+                                ctypes.c_void_p(24))
+        gl.glEnableVertexAttribArray(2)
 
         gl.glBindVertexArray(0)
 
