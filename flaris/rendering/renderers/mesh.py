@@ -11,7 +11,7 @@ from flaris.rendering.shader import Shader
 
 from ..light import Light
 from ..material import Material
-from ..mesh import Mesh
+from ..model import Model
 
 __all__ = ["MeshRenderer"]
 
@@ -44,9 +44,8 @@ DEFAULT_FRAGMENT_SHADER = """
     out vec4 FragColor;
 
     struct Material {
-        sampler2D ambient;
-        sampler2D diffuse;
-        vec3 albedo;
+        vec3 ambient;
+        vec3 diffuse;
     };
 
     struct Light {
@@ -66,15 +65,13 @@ DEFAULT_FRAGMENT_SHADER = """
     void main()
     {
         // ambient
-        vec3 ambient = material.albedo * light.ambient *
-            texture(material.ambient, TexCoords).rgb;
+        vec3 ambient = material.ambient * light.ambient;
 
         // diffuse
         vec3 norm = normalize(Normal);
         vec3 lightDir = light.direction;
         float diff = max(dot(norm, -lightDir), 0.0);
-        vec3 diffuse = material.albedo * light.diffuse *
-            (diff * texture(material.diffuse, TexCoords).rgb);
+        vec3 diffuse = material.diffuse * light.diffuse * diff;
 
         vec3 result = ambient + diffuse;
         FragColor = vec4(result, 1.0);
@@ -91,61 +88,9 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
     def __init__(self, camera: Camera, shader: Shader = DEFAULT_MESH_SHADER):
         """Initialize OpenGL buffer data."""
         self.camera = camera
-
-        # TODO(@nspevacek): replace with vertices from loaded model once
-        # implemented
-        # yapf: disable
-        vertices = np.array([
-            -0.5, -0.5, -0.5, 0.0, 0.0, -1.0, 0.0, 0.0, 0.5, -0.5, -0.5, 0.0,
-            0.0, -1.0, 1.0, 0.0, 0.5, 0.5, -0.5, 0.0, 0.0, -1.0, 1.0, 1.0, 0.5,
-            0.5, -0.5, 0.0, 0.0, -1.0, 1.0, 1.0, -0.5, 0.5, -0.5, 0.0, 0.0,
-            -1.0, 0.0, 1.0, -0.5, -0.5, -0.5, 0.0, 0.0, -1.0, 0.0, 0.0, -0.5,
-            -0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.5, -0.5, 0.5, 0.0, 0.0, 1.0,
-            1.0, 0.0, 0.5, 0.5, 0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5,
-            0.0, 0.0, 1.0, 1.0, 1.0, -0.5, 0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 1.0,
-            -0.5, -0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.5, 0.5, -1.0, 0.0,
-            0.0, 1.0, 0.0, -0.5, 0.5, -0.5, -1.0, 0.0, 0.0, 1.0, 1.0, -0.5,
-            -0.5, -0.5, -1.0, 0.0, 0.0, 0.0, 1.0, -0.5, -0.5, -0.5, -1.0, 0.0,
-            0.0, 0.0, 1.0, -0.5, -0.5, 0.5, -1.0, 0.0, 0.0, 0.0, 0.0, -0.5, 0.5,
-            0.5, -1.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, 0.0, 1.0,
-            0.0, 0.5, 0.5, -0.5, 1.0, 0.0, 0.0, 1.0, 1.0, 0.5, -0.5, -0.5, 1.0,
-            0.0, 0.0, 0.0, 1.0, 0.5, -0.5, -0.5, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5,
-            -0.5, 0.5, 1.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, 0.0,
-            1.0, 0.0, -0.5, -0.5, -0.5, 0.0, -1.0, 0.0, 0.0, 1.0, 0.5, -0.5,
-            -0.5, 0.0, -1.0, 0.0, 1.0, 1.0, 0.5, -0.5, 0.5, 0.0, -1.0, 0.0, 1.0,
-            0.0, 0.5, -0.5, 0.5, 0.0, -1.0, 0.0, 1.0, 0.0, -0.5, -0.5, 0.5, 0.0,
-            -1.0, 0.0, 0.0, 0.0, -0.5, -0.5, -0.5, 0.0, -1.0, 0.0, 0.0, 1.0,
-            -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 1.0, 0.5, 0.5, -0.5, 0.0, 1.0,
-            0.0, 1.0, 1.0, 0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 1.0, 0.0, 0.5, 0.5,
-            0.5, 0.0, 1.0, 0.0, 1.0, 0.0, -0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 0.0,
-            0.0, -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 1.0
-        ], dtype=np.float32)
-        # yapf: enable
-
         self.shader = shader
 
-        self.vao = gl.glGenVertexArrays(1)
-        vbo = gl.glGenBuffers(1)
-
-        gl.glBindVertexArray(self.vao)
-
-        gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo)
-        gl.glBufferData(gl.GL_ARRAY_BUFFER, vertices.nbytes, vertices,
-                        gl.GL_STATIC_DRAW)
-
-        gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 32,
-                                 ctypes.c_void_p(0))
-        gl.glEnableVertexAttribArray(0)
-
-        gl.glVertexAttribPointer(1, 3, gl.GL_FLOAT, gl.GL_FALSE, 32,
-                                 ctypes.c_void_p(12))
-        gl.glEnableVertexAttribArray(1)
-
-        gl.glVertexAttribPointer(2, 2, gl.GL_FLOAT, gl.GL_FALSE, 32,
-                                 ctypes.c_void_p(24))
-        gl.glEnableVertexAttribArray(2)
-
-    def draw(self, mesh: Mesh, transform: Transform, light: Light) -> None:  # pylint: disable=unused-argument  # noqa: E501
+    def draw(self, model: Model, transform: Transform, light: Light) -> None:  # pylint: disable=unused-argument  # noqa: E501
         """Draw a mesh on the screen.
 
         Args:
@@ -154,37 +99,33 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             light: The light to draw.
         """
         gl.glUseProgram(self.shader.program)
-        gl.glBindVertexArray(self.vao)
+        gl.glBindVertexArray(model.vao)
+        
+        material = model.entity[Material]
 
-        gl.glActiveTexture(gl.GL_TEXTURE0)
-        gl.glBindTexture(gl.GL_TEXTURE_2D, mesh.entity[Material].ambient)
+        self.shader.set_vec3("material.ambient", glm.vec3(material.ambient.red, material.ambient.green, material.ambient.blue))
+        self.shader.set_vec3("material.diffuse", glm.vec3(material.diffuse.red, material.diffuse.green, material.diffuse.blue))
 
-        gl.glActiveTexture(gl.GL_TEXTURE1)
-        gl.glBindTexture(gl.GL_TEXTURE_2D, mesh.entity[Material].diffuse)
-
-        self.shader.set_int("material.ambient", 0)
-        self.shader.set_int("material.diffuse", 1)
-
-        model = glm.mat4(1.0)
-        model = glm.translate(
-            model,
+        yeet = glm.mat4(1.0)
+        yeet = glm.translate(
+            yeet,
             glm.vec3(transform.position.x, transform.position.y,
                      transform.position.z))
 
-        model = glm.rotate(model, glm.radians(transform.rotation.x),
+        yeet = glm.rotate(yeet, glm.radians(transform.rotation.x),
                            glm.vec3(1.0, 0.0, 0.0))
-        model = glm.rotate(model, glm.radians(transform.rotation.y),
+        yeet = glm.rotate(yeet, glm.radians(transform.rotation.y),
                            glm.vec3(0.0, 1.0, 0.0))
-        model = glm.rotate(model, glm.radians(transform.rotation.z),
+        yeet = glm.rotate(yeet, glm.radians(transform.rotation.z),
                            glm.vec3(0.0, 0.0, 1.0))
 
-        model = glm.scale(
-            model,
+        yeet = glm.scale(
+            yeet,
             glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
 
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "model"), 1,
-            gl.GL_FALSE, glm.value_ptr(model))
+            gl.GL_FALSE, glm.value_ptr(yeet))
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "view"), 1,
             gl.GL_FALSE, glm.value_ptr(self.camera.view))
@@ -197,11 +138,9 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         forwards = glm.vec3(0, 0, 1)
         self.shader.set_vec3("light.direction", rotation * forwards)
         self.shader.set_vec3("viewPos", self.camera.entity[Transform].position)
-        albedo = mesh.entity[Material].albedo
-        self.shader.set_vec3("material.albedo",
-                             glm.vec3(albedo.red, albedo.green, albedo.blue))
+        albedo = model.entity[Material].albedo
         self.shader.set_vec3("light.diffuse", light.diffuse)
         self.shader.set_vec3("light.ambient", light.ambient)
 
-        gl.glDrawArrays(gl.GL_TRIANGLES, 0, 36)
+        gl.glDrawArrays(gl.GL_TRIANGLES, 0, len(model._vertices))
         gl.glBindVertexArray(0)

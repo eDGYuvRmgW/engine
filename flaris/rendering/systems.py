@@ -9,7 +9,7 @@ from flaris.transform import Transform
 
 from .camera import OrthographicCamera
 from .light import DirectionalLight, AmbientLight
-from .mesh import Mesh
+from .model import Model
 from .sprite import Sprite
 from .text import Text
 from .renderers import MeshRenderer, SpriteRenderer, TextRenderer
@@ -70,7 +70,7 @@ class SpriteRenderingSystem(System):
 class MeshRenderingSystem(System):
     """System that renders a mesh."""
 
-    REQUIRED_COMPONENTS = Transform, Mesh
+    REQUIRED_COMPONENTS = Transform, Model
 
     def __init__(self):
         """Initialize the scene."""
@@ -92,7 +92,7 @@ class MeshRenderingSystem(System):
             # First pass
             gl.glDepthFunc(gl.GL_LESS)
             gl.glDisable(gl.GL_BLEND)
-            self.renderer.draw(entity[Mesh], entity[Transform], self.lights[0])
+            self.renderer.draw(entity[Model], entity[Transform], self.lights[0])
 
         for entity in self.entities:
             # Second+ pass
@@ -100,7 +100,7 @@ class MeshRenderingSystem(System):
             gl.glEnable(gl.GL_BLEND)
             gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE)
             for light in self.lights[1:]:
-                self.renderer.draw(entity[Mesh], entity[Transform], light)
+                self.renderer.draw(entity[Model], entity[Transform], light)
 
     def add(self, entity: Entity) -> None:
         """Add an entity to the scene."""

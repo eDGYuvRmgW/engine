@@ -23,9 +23,9 @@ class Material(Component):
     @property
     def ambient(self):
         """Return a texture specifying the ambient coefficients."""
-        return self.entity[Texture].name
+        return self.albedo
 
     @property
     def diffuse(self):
         """Return a texture specifying the diffuse coefficients."""
-        return self.entity[Texture].name
+        return self.albedo
