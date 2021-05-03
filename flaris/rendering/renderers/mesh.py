@@ -11,7 +11,7 @@ from flaris.rendering.shader import Shader
 
 from ..light import Light
 from ..material import Material
-from ..model import Model
+from ..mesh import Mesh
 
 __all__ = ["MeshRenderer"]
 
@@ -90,7 +90,7 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         self.camera = camera
         self.shader = shader
 
-    def draw(self, model: Model, transform: Transform, light: Light) -> None:  # pylint: disable=unused-argument  # noqa: E501
+    def draw(self, mesh: Mesh, transform: Transform, light: Light) -> None:  # pylint: disable=unused-argument  # noqa: E501
         """Draw a mesh on the screen.
 
         Args:
@@ -99,33 +99,33 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
             light: The light to draw.
         """
         gl.glUseProgram(self.shader.program)
-        gl.glBindVertexArray(model.vao)
+        gl.glBindVertexArray(mesh.vao)
         
-        material = model.entity[Material]
+        material = transform.entity[Material]
 
         self.shader.set_vec3("material.ambient", glm.vec3(material.ambient.red, material.ambient.green, material.ambient.blue))
         self.shader.set_vec3("material.diffuse", glm.vec3(material.diffuse.red, material.diffuse.green, material.diffuse.blue))
 
-        yeet = glm.mat4(1.0)
-        yeet = glm.translate(
-            yeet,
+        model = glm.mat4(1.0)
+        model = glm.translate(
+            model,
             glm.vec3(transform.position.x, transform.position.y,
                      transform.position.z))
 
-        yeet = glm.rotate(yeet, glm.radians(transform.rotation.x),
+        model = glm.rotate(model, glm.radians(transform.rotation.x),
                            glm.vec3(1.0, 0.0, 0.0))
-        yeet = glm.rotate(yeet, glm.radians(transform.rotation.y),
+        model = glm.rotate(model, glm.radians(transform.rotation.y),
                            glm.vec3(0.0, 1.0, 0.0))
-        yeet = glm.rotate(yeet, glm.radians(transform.rotation.z),
+        model = glm.rotate(model, glm.radians(transform.rotation.z),
                            glm.vec3(0.0, 0.0, 1.0))
 
-        yeet = glm.scale(
-            yeet,
+        model = glm.scale(
+            model,
             glm.vec3(transform.scale.x, transform.scale.y, transform.scale.z))
 
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "model"), 1,
-            gl.GL_FALSE, glm.value_ptr(yeet))
+            gl.GL_FALSE, glm.value_ptr(model))
         gl.glUniformMatrix4fv(
             gl.glGetUniformLocation(self.shader.program, "view"), 1,
             gl.GL_FALSE, glm.value_ptr(self.camera.view))
@@ -138,9 +138,9 @@ class MeshRenderer:  # pylint: disable=too-few-public-methods
         forwards = glm.vec3(0, 0, 1)
         self.shader.set_vec3("light.direction", rotation * forwards)
         self.shader.set_vec3("viewPos", self.camera.entity[Transform].position)
-        albedo = model.entity[Material].albedo
+        albedo = transform.entity[Material].albedo
         self.shader.set_vec3("light.diffuse", light.diffuse)
         self.shader.set_vec3("light.ambient", light.ambient)
 
-        gl.glDrawArrays(gl.GL_TRIANGLES, 0, len(model._vertices))
+        gl.glDrawArrays(gl.GL_TRIANGLES, 0, mesh.size)
         gl.glBindVertexArray(0)

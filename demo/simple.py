@@ -9,9 +9,12 @@ class Cow(Entity):
     def __init__(self, transform):
         super().__init__()
         self.transform = transform
-        self.model = Model("demo/teapot.dae")
+        self.model = Model("demo/cow.dae")
         self.texture = Texture("demo/checkers.png")
         self.material = Material(albedo=Color(0.2, 0.2, 0.2))
+
+    def update(self, delta: float):
+        self.transform.position += Vector(0, 1, 0) * delta
 
 
 class MainCamera(Entity):

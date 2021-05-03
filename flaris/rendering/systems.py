@@ -88,19 +88,21 @@ class MeshRenderingSystem(System):
         if not self.lights:
             return
 
+        # First pass
         for entity in self.entities:
-            # First pass
-            gl.glDepthFunc(gl.GL_LESS)
-            gl.glDisable(gl.GL_BLEND)
-            self.renderer.draw(entity[Model], entity[Transform], self.lights[0])
+            for mesh in entity[Model]:
+                gl.glDepthFunc(gl.GL_LESS)
+                gl.glDisable(gl.GL_BLEND)
+                self.renderer.draw(mesh, entity[Transform], self.lights[0])
 
+        # Second+ pass
         for entity in self.entities:
-            # Second+ pass
-            gl.glDepthFunc(gl.GL_EQUAL)
-            gl.glEnable(gl.GL_BLEND)
-            gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE)
-            for light in self.lights[1:]:
-                self.renderer.draw(entity[Model], entity[Transform], light)
+            for mesh in entity[Model]:
+                gl.glDepthFunc(gl.GL_EQUAL)
+                gl.glEnable(gl.GL_BLEND)
+                gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE)
+                for light in self.lights[1:]:
+                    self.renderer.draw(mesh, entity[Transform], light)
 
     def add(self, entity: Entity) -> None:
         """Add an entity to the scene."""
