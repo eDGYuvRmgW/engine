@@ -186,9 +186,7 @@ class AudioSource:
                 volume is set to 0. If value is greater than 1, then the
                 volume is set to 1.
         """
-        if value < 0:
-            value = 0
-        if value > 1:
-            value = 1
+        value = max(value, 0)
+        value = min(value, 1)
         alSourcef(self.id, ctypes.c_int(AL_GAIN), ctypes.c_float(value))
         self._volume = value

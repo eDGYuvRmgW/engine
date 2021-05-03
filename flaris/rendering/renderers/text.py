@@ -92,8 +92,9 @@ class TextRenderer:  # noqa: E241  # pylint: disable=too-few-public-methods
         projection = glm.ortho(0.0, window_width, 0, window_height)
         self.shader.set_mat4("projection", projection)
 
-        self.shader.set_vec3("textColor", text.color.red, text.color.blue,
-                             text.color.green)
+        self.shader.set_vec3(
+            "textColor",
+            glm.vec3(text.color.red, text.color.blue, text.color.green))
 
         gl.glActiveTexture(gl.GL_TEXTURE0)
 
