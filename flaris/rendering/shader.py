@@ -65,16 +65,10 @@ class Shader:  # pylint: disable=too-few-public-methods
         """
         gl.glUniform1f(gl.glGetUniformLocation(self.program, name), value)
 
-    def set_vec3(self, name: str, x: float, y: float, z: float) -> None:
-        """Set the value of a vec3 uniform.
-
-        Args:
-            name: The name of the uniform.
-            x: The x value of the vec3.
-            y: The y value of the vec3.
-            z: The z value of the vec3.
-        """
-        gl.glUniform3f(gl.glGetUniformLocation(self.program, name), x, y, z)
+    def set_vec3(self, name: str, vector: glm.vec3) -> None:
+        """Set the value of a vec3 uniform."""
+        gl.glUniform3f(gl.glGetUniformLocation(self.program, name), vector.x,
+                       vector.y, vector.z)
 
     def set_mat4(self, name: str, value: glm.mat4) -> None:
         """Set the value of a mat4 uniform.
@@ -109,6 +103,9 @@ class Shader:  # pylint: disable=too-few-public-methods
         Returns:
             A Shader instance.
         """
+        # NOTE(@bveeramani): I don't remeber why, but there was some reason why
+        # I didn't want to use with statements here.
+        # pylint: disable=consider-using-with
         vertex_shader = tempfile.NamedTemporaryFile(mode="w", delete=False)
         fragment_shader = tempfile.NamedTemporaryFile(mode="w", delete=False)
 

@@ -51,10 +51,16 @@ class SpriteRenderer:  # pylint: disable=too-few-public-methods
 
     def __init__(self, shader: Shader = DEFAULT_SPRITE_SHADER):
         """Initialize OpenGL buffer data."""
+        # yapf: disable
         vertices = np.array([
-            0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0
+            0.0, 1.0, 0.0, 1.0,
+            1.0, 0.0, 1.0, 0.0,
+            0.0, 0.0, 0.0, 0.0,
+            0.0, 1.0, 0.0, 1.0,
+            1.0, 1.0, 1.0, 1.0,
+            1.0, 0.0, 1.0, 0.0
         ], dtype=np.float32)
+        # yapf: enable
 
         self.shader = shader
 
@@ -112,8 +118,9 @@ class SpriteRenderer:  # pylint: disable=too-few-public-methods
 
         self.shader.set_mat4("model", model)
         # TODO(@bveeramani): Add support for color alpha.
-        self.shader.set_vec3("spriteColor", sprite.color.red,
-                             sprite.color.green, sprite.color.blue)
+        self.shader.set_vec3(
+            "spriteColor",
+            glm.vec3(sprite.color.red, sprite.color.green, sprite.color.blue))
 
         gl.glBindVertexArray(self.vao)
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, 6)
